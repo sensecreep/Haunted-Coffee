@@ -1,0 +1,14 @@
+<dialogues>
+
+  <dialogue id="cafe_npc">
+    <line>Привет! Рад тебя видеть.</line>
+    <line>Я только что пришёл в кафе.</line>
+    <line>Можешь принести мне кофе?</line>
+  </dialogue>
+
+  <dialogue id="quest_done">
+    <line>О, ты вернулся!</line>
+    <line>Спасибо за помощь.</line>
+  </dialogue>
+
+</dialogues>

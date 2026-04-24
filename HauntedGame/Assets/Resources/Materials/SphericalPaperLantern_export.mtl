@@ -1,0 +1,13 @@
+# Blender 5.0.1 MTL File: 'SphericalPaperLantern_export.blend'
+# www.blender.org
+
+newmtl sphrere_paperLantern
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd C:/Spherical Paper Lantern_diff.png
+map_Ns C:/Spherical Paper Lantern_roug.png
+map_Ke C:/Spherical Paper Lantern_emit.png
+map_Bump -bm 1.000000 C:/Spherical Paper Lantern_normal.png
