@@ -1,13 +1,20 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class CupController : MonoBehaviour
 {
+    [Header("Drink Data")]
+    public bool hasCoffee = false;
+    public int milkAmount = 0; // приходит ИЗ ПИТЧЕРА
+    public List<AddonType> addons = new List<AddonType>();
+
     public CoffeeMachineController currentMachine;
     public enum CupState
     {
         OnTable,
         InHand,
-        InMachine
+        InMachine,
+        Placed
     }
 
     public CupState state = CupState.OnTable;
@@ -68,6 +75,61 @@ public class CupController : MonoBehaviour
         if (state == CupState.InMachine && !isLocked)
         {
             PickUp();
+        }
+    }
+    public void PlaceInAssembly(Transform slot)
+    {
+        isLocked = true;
+
+        transform.SetParent(slot);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+
+        state = CupState.Placed;
+
+        Debug.Log("Чашка на станции сборки");
+    }
+
+    public void ApplyMilkFromPitcher(int amount)
+    {
+        milkAmount = amount;
+
+        Debug.Log("Молоко применено из питчера: " + milkAmount);
+    }
+
+    public void AddCoffee()
+    {
+        hasCoffee = true;
+
+        Debug.Log("В чашке есть кофе");
+    }
+
+    public void AddAddon(AddonType type)
+    {
+        if (!addons.Contains(type))
+            addons.Add(type);
+
+        Debug.Log("Добавка: " + type);
+    }
+
+    public DrinkType GetDrinkType()
+    {
+        if (!hasCoffee)
+            return DrinkType.Espresso;
+
+        switch (milkAmount)
+        {
+            case 0:
+                return DrinkType.Espresso;
+
+            case 1:
+                return DrinkType.Cappuccino;
+
+            case 2:
+                return DrinkType.Latte;
+
+            default:
+                return DrinkType.Latte;
         }
     }
 }

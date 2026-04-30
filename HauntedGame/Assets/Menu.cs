@@ -29,6 +29,17 @@ public class Menu : MonoBehaviour
     {
         SceneManager.LoadScene("NPCTask");
     }
+    public void NextDay()
+    {
+        StartCoroutine(LoadNextDay());
+    }
+
+    IEnumerator LoadNextDay()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public void OnQuitButtonClick()
     {
         // Для редактора
