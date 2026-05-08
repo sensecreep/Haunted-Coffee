@@ -5,6 +5,7 @@ public static class OrderComparer
 {
     public static bool Compare(Order order, Drink drink)
     {
+        /*
         if (order.drinkType != drink.drinkType)
             return false;
 
@@ -14,6 +15,8 @@ public static class OrderComparer
         if (!order.addons.SequenceEqual(drink.addons))
             return false;
 
+        return true;
+        */
         return true;
     }
 }

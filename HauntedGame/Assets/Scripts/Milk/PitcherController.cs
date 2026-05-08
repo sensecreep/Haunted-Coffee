@@ -1,4 +1,5 @@
 using UnityEngine;
+using static PortafilterController;
 
 public class PitcherController : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class PitcherController : MonoBehaviour
     [Header("Links")]
     public Transform handPoint;
     public MilkStationTrigger currentStation;
+    public Transform defaultPoint;  // позиция
+
 
     [Header("Settings")]
     public bool isLocked = false;
@@ -120,5 +123,19 @@ public class PitcherController : MonoBehaviour
         Debug.Log("Молоко взбито: " + value);
 
         // 👉 тут потом можно сменить материал
+    }
+
+    public void ResetToDefault()
+    {
+        state = PitcherState.Idle;
+
+        transform.SetParent(defaultPoint);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        ResetMilk();
+        SetSteamed(false);
+        isLocked = false;
+
+        Debug.Log("Питчер сброшен");
     }
 }

@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class DrinkAssemblyTrigger : MonoBehaviour
 {
+    public GameObject pressEUI;
+
     [Header("Camera")]
     public Transform cameraPoint;
     public Transform playerSpot;
@@ -10,57 +12,60 @@ public class DrinkAssemblyTrigger : MonoBehaviour
     public DrinkAssemblyController controller;
 
     private bool playerInRange;
-    public bool isUsing;
+    private bool isUsing;
+
+    void Start()
+    {
+        if (pressEUI != null)
+            pressEUI.SetActive(false);
+    }
 
     void Update()
     {
-        if (!playerInRange || isUsing)
-            return;
-
-        // вход по ЛКМ (как ты хочешь)
-        if (Input.GetMouseButtonDown(0))
+        // 👉 ВХОД
+        if (!isUsing && playerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            TryEnter();
+            OpenAssembly();
+            return;
+        }
+
+        // 👉 ВЫХОД
+        if (isUsing && Input.GetKeyDown(KeyCode.Escape))
+        {
+            CloseAssembly();
         }
     }
 
-    void TryEnter()
-    {
-        Camera cam = CameraFocusController.Instance.GetActiveCamera();
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
-        if (!Physics.Raycast(ray, out RaycastHit hit, 5f))
-            return;
-
-        if (!hit.transform.IsChildOf(transform))
-            return;
-
-        Enter();
-    }
-
-    void Enter()
+    void OpenAssembly()
     {
         isUsing = true;
 
-        MovePlayer();
+        if (pressEUI != null)
+            pressEUI.SetActive(false);
+
+        MovePlayerToSpot();
 
         PlayerLock.Instance.Lock();
         CameraFocusController.Instance.FocusOn(cameraPoint);
 
         controller.EnterMode();
+
+        Debug.Log("Вошли в сборку напитка");
     }
 
-    public void Exit()
+    public void CloseAssembly()
     {
         isUsing = false;
 
-        controller.ExitMode();
-
         CameraFocusController.Instance.Return();
         PlayerLock.Instance.Unlock();
+
+        controller.ExitMode();
+
+        Debug.Log("Вышли из сборки напитка");
     }
 
-    void MovePlayer()
+    void MovePlayerToSpot()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -71,12 +76,20 @@ public class DrinkAssemblyTrigger : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
         playerInRange = true;
+
+        if (pressEUI != null)
+            pressEUI.SetActive(true);
     }
 
     void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
         playerInRange = false;
+
+        if (pressEUI != null)
+            pressEUI.SetActive(false);
     }
 }

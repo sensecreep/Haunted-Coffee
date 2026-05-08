@@ -6,6 +6,7 @@ public class SteamWandController : MonoBehaviour
     [Header("Links")]
     public Transform wandClickable;      // куда кликаем
     public Transform pitcherSlot;        // куда вставляется питчер
+    public GameObject outlineObject;
 
     [Header("Pitcher")]
     public PitcherController pitcher;
@@ -18,30 +19,24 @@ public class SteamWandController : MonoBehaviour
 
     private bool isBusy = false;
 
+    private void Start()
+    {
+        outlineObject.SetActive(false);
+    }
+
     void Update()
     {
         if (isBusy) return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && pitcher.state == PitcherController.PitcherState.InHand)
         {
+            outlineObject.SetActive(false);
             TryStartSteaming();
         }
     }
 
     void TryStartSteaming()
     {
-        if (pitcher == null)
-        {
-            Debug.Log("Питчер не назначен");
-            return;
-        }
-
-        if (pitcher.state != PitcherController.PitcherState.InHand)
-        {
-            Debug.Log("Питчер не в руках");
-            return;
-        }
-
         // ❌ нет молока
         if (pitcher.milkLevel == 0)
         {
@@ -90,5 +85,17 @@ public class SteamWandController : MonoBehaviour
         Debug.Log("Молоко готово");
 
         isBusy = false;
+    }
+
+    void OnMouseEnter()
+    {
+        if (isBusy) return;
+        outlineObject.SetActive(true);
+    }
+
+    void OnMouseExit()
+    {
+        if (isBusy) return;
+        outlineObject.SetActive(false);
     }
 }

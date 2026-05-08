@@ -3,8 +3,6 @@ using UnityEngine;
 public class PortafilterController : MonoBehaviour
 {
     public Transform handPoint;
-
-    private bool isInHand = false;
     private Camera cam;
     private Renderer rend;
     public GameObject outlineObject;
@@ -45,8 +43,7 @@ public class PortafilterController : MonoBehaviour
 
     void TryPickUp()
     {
-        if (isInHand) return;
-        if (isLocked) return;
+        if (state == PortafilterState.InHand || isLocked) return;
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out RaycastHit hit, 2f)) return;
@@ -80,42 +77,26 @@ public class PortafilterController : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if (isInHand) return;
-        if (isLocked)
-        {
-            return;
-        }
+        if (state == PortafilterState.InHand || isLocked) return;
         outlineObject.SetActive(true);
     }
 
     void OnMouseExit()
     {
-        if (isLocked) return;
-        if (isInHand) return;
+        if (state == PortafilterState.InHand || isLocked) return;
         outlineObject.SetActive(false);
     }
 
     void OnMouseDown()
     {
-        if (isLocked)
-            return;
+        if (isLocked) return;
 
         if (state == PortafilterState.InGrinder)
         {
-            TakeFromGrinder();
+            PickUp();
+            // 👉 ВЫХОД ИЗ РЕЖИМА
+            FindFirstObjectByType<CoffeeGrinderTrigger>().CloseGrinder();
         }
-    }
-
-    void TakeFromGrinder()
-    {
-        state = PortafilterState.InHand;
-
-        transform.SetParent(handPoint);
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-
-        // 👉 ВЫХОД ИЗ РЕЖИМА
-        FindObjectOfType<CoffeeGrinderTrigger>().CloseGrinder();
     }
 
     public void ResetToDefault()

@@ -1,16 +1,17 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using static PitcherController;
 
 public class DrinkAssemblyController : MonoBehaviour
 {
-    [Header("Slots")]
-    public Transform cupSlot;
-
     [Header("Links")]
-    public CupController currentCup;
-    public PitcherController pitcher;
+    public Transform cupSlot;
+    public CupController cup;           // ссылка на единственную кружку
+    public PitcherController pitcher;   // ссылка на питчер
 
-    private bool isActive;
+    private CupController currentCup;
+
+    private bool isActive = false;
 
     private List<AddonType> addedSpices = new List<AddonType>();
 
@@ -45,14 +46,18 @@ public class DrinkAssemblyController : MonoBehaviour
         if (!Physics.Raycast(ray, out RaycastHit hit, 5f))
             return;
 
-        // 👉 чашка
-        if (hit.transform.GetComponentInParent<CupController>())
+        // ======================
+        // ☕ ПОСТАВИТЬ КРУЖКУ
+        // ======================
+        if (cup.state == CupController.CupState.InHand)
         {
             TryPlaceCup();
             return;
         }
 
-        // 👉 специи
+        // ======================
+        // 🍯 СПЕЦИИ
+        // ======================
         SpiceItem spice = hit.transform.GetComponentInParent<SpiceItem>();
         if (spice != null)
         {
@@ -60,32 +65,124 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
-        // 👉 условный “финал”
-        if (hit.transform.CompareTag("FinishDrink"))
+        // ======================
+        // 🥛 МОЛОКО
+        // ======================
+        if (pitcher.state == PitcherController.PitcherState.InHand)
+        {
+            TryAddMilk();
+            return;
+        }
+
+        // ======================
+        // ✅ ФИНАЛ
+        // ======================
+        if (hit.transform == currentCup.transform) 
         {
             FinishDrink();
         }
+
+
     }
+
+    // ======================
+    // ☕ ЧАШКА
+    // ======================
 
     void TryPlaceCup()
     {
-        CupController cup = currentCup;
+        if (currentCup != null)
+        {
+            Debug.Log("Чашка уже стоит");
+            return;
+        }
 
-        if (cup == null) return;
+        if (cup == null)
+        {
+            Debug.Log("Нет ссылки на кружку");
+            return;
+        }
+
+        if (cup.state != CupController.CupState.InHand)
+        {
+            Debug.Log("Кружка не в руках");
+            return;
+        }
 
         cup.PlaceInAssembly(cupSlot);
-
         currentCup = cup;
 
         Debug.Log("Чашка поставлена");
     }
 
+    // ======================
+    // 🥛 МОЛОКО
+    // ======================
+
+    void TryAddMilk()
+    {
+
+        if (pitcher == null)
+        {
+            Debug.Log("Нет питчера");
+            return;
+        }
+
+        if (pitcher.state != PitcherController.PitcherState.InHand)
+        {
+            Debug.Log("Питчер не в руках");
+            return;
+        }
+
+        /*if (!pitcher.isSteamed)
+        {
+            Debug.Log("Молоко не взбито");
+            return;
+        }*/
+
+        if (pitcher.milkLevel == 0)
+        {
+            Debug.Log("В питчере нет молока");
+            return;
+        }
+
+        if (currentCup.milkAmount > 0)
+        {
+            Debug.Log("Молоко уже добавлено");
+            return;
+        }
+
+        currentCup.ApplyMilkFromPitcher(pitcher.milkLevel);
+
+        pitcher.ResetToDefault();
+
+        Debug.Log("Молоко перелито в чашку");
+    }
+
+    // ======================
+    // 🍯 СПЕЦИИ
+    // ======================
+
     void AddSpice(AddonType type)
     {
-        addedSpices.Add(type);
+        if (currentCup == null)
+        {
+            Debug.Log("Нет чашки");
+            return;
+        }
 
-        Debug.Log("Добавлена специя: " + type);
+        if (!addedSpices.Contains(type))
+        {
+            addedSpices.Add(type);
+            currentCup.AddAddon(type);
+
+            Debug.Log("Добавлена специя: " + type);
+        }
     }
+
+    // ======================
+    // ✅ ФИНАЛ
+    // ======================
 
     void FinishDrink()
     {
@@ -95,13 +192,31 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
+        if (currentCup.amountOfCoffee == 0.0f)
+        {
+            Debug.Log("Нет кофе");
+            return;
+        }
+
         Drink drink = new Drink
         {
+            milkAmount = currentCup.milkAmount,
             drinkType = currentCup.GetDrinkType(),
-            addons = new List<AddonType>(currentCup.addons),
-            milkAmount = currentCup.milkAmount
+            addons = new List<AddonType>(currentCup.addons)
         };
+        currentCup.Unlock();
+        currentCup.PickUp();
 
-        Debug.Log("Напиток: " + drink.drinkType + " | молоко: " + drink.milkAmount);
+        Debug.Log("Напиток собран: " + drink.drinkType);
+
+        ResetStation();
+    }
+
+    void ResetStation()
+    {
+        currentCup = null;
+        addedSpices.Clear();
+
+        Debug.Log("Станция очищена");
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class CupController : MonoBehaviour
 {
     [Header("Drink Data")]
-    public bool hasCoffee = false;
+    public float amountOfCoffee = 0.0f;
     public int milkAmount = 0; // приходит ИЗ ПИТЧЕРА
     public List<AddonType> addons = new List<AddonType>();
 
@@ -97,9 +97,9 @@ public class CupController : MonoBehaviour
         Debug.Log("Молоко применено из питчера: " + milkAmount);
     }
 
-    public void AddCoffee()
+    public void AddCoffee(float amount)
     {
-        hasCoffee = true;
+        amountOfCoffee = amount;
 
         Debug.Log("В чашке есть кофе");
     }
@@ -114,7 +114,7 @@ public class CupController : MonoBehaviour
 
     public DrinkType GetDrinkType()
     {
-        if (!hasCoffee)
+        if (amountOfCoffee == 0.0f)
             return DrinkType.Espresso;
 
         switch (milkAmount)

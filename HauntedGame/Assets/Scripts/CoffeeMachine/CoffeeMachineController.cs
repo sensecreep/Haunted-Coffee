@@ -302,6 +302,8 @@ public class CoffeeMachineController : MonoBehaviour
 
         buttonRenderer.material = readyMat;
 
+        currentCup.AddCoffee(currentValue);
+
         Debug.Log("Остановлено: " + currentValue);
 
         Evaluate();
