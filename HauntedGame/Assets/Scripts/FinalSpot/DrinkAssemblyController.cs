@@ -46,18 +46,12 @@ public class DrinkAssemblyController : MonoBehaviour
         if (!Physics.Raycast(ray, out RaycastHit hit, 5f))
             return;
 
-        // ======================
-        // ☕ ПОСТАВИТЬ КРУЖКУ
-        // ======================
         if (cup.state == CupController.CupState.InHand)
         {
             TryPlaceCup();
             return;
         }
 
-        // ======================
-        // 🍯 СПЕЦИИ
-        // ======================
         SpiceItem spice = hit.transform.GetComponentInParent<SpiceItem>();
         if (spice != null)
         {
@@ -65,18 +59,12 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
-        // ======================
-        // 🥛 МОЛОКО
-        // ======================
         if (pitcher.state == PitcherController.PitcherState.InHand)
         {
             TryAddMilk();
             return;
         }
 
-        // ======================
-        // ✅ ФИНАЛ
-        // ======================
         if (hit.transform == currentCup.transform) 
         {
             FinishDrink();
@@ -84,10 +72,6 @@ public class DrinkAssemblyController : MonoBehaviour
 
 
     }
-
-    // ======================
-    // ☕ ЧАШКА
-    // ======================
 
     void TryPlaceCup()
     {
@@ -114,10 +98,6 @@ public class DrinkAssemblyController : MonoBehaviour
 
         Debug.Log("Чашка поставлена");
     }
-
-    // ======================
-    // 🥛 МОЛОКО
-    // ======================
 
     void TryAddMilk()
     {
@@ -159,10 +139,6 @@ public class DrinkAssemblyController : MonoBehaviour
         Debug.Log("Молоко перелито в чашку");
     }
 
-    // ======================
-    // 🍯 СПЕЦИИ
-    // ======================
-
     void AddSpice(AddonType type)
     {
         if (currentCup == null)
@@ -180,10 +156,6 @@ public class DrinkAssemblyController : MonoBehaviour
         }
     }
 
-    // ======================
-    // ✅ ФИНАЛ
-    // ======================
-
     void FinishDrink()
     {
         if (currentCup == null)
@@ -200,16 +172,22 @@ public class DrinkAssemblyController : MonoBehaviour
 
         Drink drink = new Drink
         {
+            beans = PlayerInventory.Instance.selectedBeans,
             milkAmount = currentCup.milkAmount,
             drinkType = currentCup.GetDrinkType(),
             addons = new List<AddonType>(currentCup.addons)
         };
+
+        PlayerInventory.Instance.currentDrink = drink;
+
         currentCup.Unlock();
         currentCup.PickUp();
 
         Debug.Log("Напиток собран: " + drink.drinkType);
 
         ResetStation();
+
+        PlayerInventory.Instance.selectedBeans = null;
     }
 
     void ResetStation()

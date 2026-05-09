@@ -4,6 +4,7 @@ public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance;
 
+    public Drink currentDrink;
     public CoffeeBeans selectedBeans;
     public CupController currentCup;
 

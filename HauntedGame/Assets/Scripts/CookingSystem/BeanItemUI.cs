@@ -11,12 +11,18 @@ public class BeanItemUI : MonoBehaviour
     private CoffeeBeans beans;
     private CoffeeGrinderUI parentUI;
 
+    public TextMeshProUGUI bitternessLabel;
+    public TextMeshProUGUI acidityLabel;
+
     public void Setup(CoffeeBeans beans, CoffeeGrinderUI ui)
     {
         this.beans = beans;
         parentUI = ui;
 
         beanNameText.text = beans.beanName;
+
+        bitternessLabel.text = "Горечь";
+        acidityLabel.text = "Кислотность";
 
         DrawDots(bitternessDots, beans.bitterness);
         DrawDots(acidityDots, beans.acidity);

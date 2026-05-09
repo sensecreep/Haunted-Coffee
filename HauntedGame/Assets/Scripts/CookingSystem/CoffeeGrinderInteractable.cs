@@ -15,7 +15,6 @@ public class CoffeeGrinderInteractable : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("КЛИК ПО КОФЕМОЛКЕ");
 
             TryInsert();
         }

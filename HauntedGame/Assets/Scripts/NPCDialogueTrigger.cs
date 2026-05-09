@@ -16,6 +16,15 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     private MonoBehaviour playerController;
 
+    private DialogueMode currentDialogueMode = DialogueMode.None;
+
+    enum DialogueMode
+    {
+        None,
+        Order,
+        ServeReaction
+    }
+
     void Start()
     {
         playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -31,17 +40,7 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     void Update()
     {
-        if (customer != null && !customer.CanStartDialogue())
-            return;
-
-        /*
-        if (!dialogueBox.gameObject.activeSelf && dialogueStarted)
-        {
-            dialogueStarted = false;
-            cameraController.EndDialogueLook();
-        } */
-
-        // Игрок не рядом — всё скрываем
+        // Игрок далеко
         if (!npcController.PlayerIsInTalkDistance)
         {
             pressEUI.SetActive(false);
@@ -49,32 +48,48 @@ public class NPCDialogueTrigger : MonoBehaviour
             return;
         }
 
-        // Если диалог идёт — подсказку НЕ показываем
+        // Если диалог открыт
         if (dialogueBox.gameObject.activeSelf)
         {
             pressEUI.SetActive(false);
             return;
         }
 
-        // Игрок рядом и диалог не идёт
-        pressEUI.SetActive(true);
-
-        if (dialogueStarted)
+        if (customer != null && customer.State == Customer.CustomerState.Served)
+        {
+            pressEUI.SetActive(false);
             return;
+        }
+
+        pressEUI.SetActive(true);
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            StartDialogue();
+            if (customer != null &&
+                customer.State == Customer.CustomerState.WaitingForDrink)
+            {
+                TryServeDrink();
+                return;
+            }
+
+            if (customer != null &&
+                customer.State == Customer.CustomerState.Idle)
+            {
+                StartOrderDialogue();
+                return;
+            }
         }
     }
 
-    void StartDialogue()
+    void StartOrderDialogue()
     {
         playerController.enabled = false;
 
         cameraController.StartDialogueLook(npcLookPoint);
 
         dialogueStarted = true;
+        currentDialogueMode = DialogueMode.Order;
+
         pressEUI.SetActive(false);
 
         string[] lines = customer != null
@@ -96,14 +111,97 @@ public class NPCDialogueTrigger : MonoBehaviour
 
     void HandleDialogueEnded()
     {
-        if (customer != null)
-        {
-            customer.AcceptOrder();
-            OrderUI.Instance.ShowOrder(customer.currentOrder);
-        }
+        if (!dialogueStarted)
+            return;
+
         playerController.enabled = true;
         dialogueStarted = false;
         cameraController.EndDialogueLook();
+
+        if (currentDialogueMode == DialogueMode.Order)
+        {
+            if (customer != null)
+            {
+                customer.AcceptOrder();
+                OrderUI.Instance.ShowOrder(customer.currentOrder);
+            }
+        }
+        else if (currentDialogueMode == DialogueMode.ServeReaction)
+        {
+            npcController.LeaveCafe(() =>
+            {
+                CustomerSpawner.Instance.SpawnNextCustomer();
+            });
+        }
+
+        currentDialogueMode = DialogueMode.None;
     }
 
+    void TryServeDrink()
+    {
+        Drink playerDrink = PlayerInventory.Instance.currentDrink;
+
+        if (playerDrink == null)
+        {
+            Debug.Log("У игрока нет напитка");
+            return;
+        }
+
+        bool success = customer.CheckDrink(playerDrink);
+
+        ResetPlayerDrinkAndCup();
+
+        customer.Serve();
+
+        playerController.enabled = false;
+        cameraController.StartDialogueLook(npcLookPoint);
+
+        dialogueStarted = true;
+        currentDialogueMode = DialogueMode.ServeReaction;
+
+        pressEUI.SetActive(false);
+
+        if (success)
+        {
+            Debug.Log("Клиент доволен 😊");
+
+            dialogueBox.gameObject.SetActive(true);
+            dialogueBox.StartDialogue(new string[]
+            {
+            "Спасибо!",
+            "Именно то, что я заказывал."
+            });
+        }
+        else
+        {
+            Debug.Log("Заказ неверный 😡");
+
+            dialogueBox.gameObject.SetActive(true);
+            dialogueBox.StartDialogue(new string[]
+            {
+            "Это не мой заказ.",
+            "Я просил другой напиток."
+            });
+        }
+
+        //customer.Serve();
+
+        //PlayerInventory.Instance.currentDrink = null;
+    }
+
+    void ResetPlayerDrinkAndCup()
+    {
+        PlayerInventory.Instance.currentDrink = null;
+
+        CupController cup = PlayerInventory.Instance.currentCup;
+
+        if (cup != null)
+        {
+            cup.ResetCupToStart();
+        }
+        else
+        {
+            Debug.LogWarning("currentCup не найден. Напиток удалён, но чашка не сброшена.");
+        }
+    }
 }

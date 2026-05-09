@@ -16,6 +16,11 @@ public class Customer : MonoBehaviour
         BuildDialogueLines();
     }
 
+    public void Serve()
+    {
+        State = CustomerState.Served;
+    }
+
     void GenerateOrder()
     {
         currentOrder = OrderGenerator.GenerateRandomOrder();

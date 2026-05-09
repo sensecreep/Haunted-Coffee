@@ -26,7 +26,7 @@ public class CoffeeGrinderUI : MonoBehaviour
             Destroy(child.gameObject);
 
         float startY = 300f;
-        float spacing = -190f; // расстояние между карточками
+        float spacing = -200f; // расстояние между карточками
 
         foreach (var bean in beansDatabase.beans)
         {
@@ -35,7 +35,7 @@ public class CoffeeGrinderUI : MonoBehaviour
 
             rect.anchoredPosition = new Vector2(0, startY);
             startY += spacing;
-
+            
             item.Setup(bean, this);
         }
     }

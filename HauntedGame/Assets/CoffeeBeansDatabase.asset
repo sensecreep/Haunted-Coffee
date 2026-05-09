@@ -17,5 +17,8 @@ MonoBehaviour:
     bitterness: 2
     acidity: 4
   - beanName: Robusta
+    bitterness: 5
+    acidity: 2
+  - beanName: Hz
     bitterness: 3
-    acidity: 5
+    acidity: 3

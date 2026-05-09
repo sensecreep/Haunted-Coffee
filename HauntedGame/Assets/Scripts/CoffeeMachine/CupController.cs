@@ -23,6 +23,17 @@ public class CupController : MonoBehaviour
 
     private bool isLocked = false;
 
+    private Transform startParent;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
+    private void Start()
+    {
+        startParent = transform.parent;
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+    }
+
     public void PickUp()
     {
         PlayerInventory.Instance.currentCup = this;
@@ -131,5 +142,26 @@ public class CupController : MonoBehaviour
             default:
                 return DrinkType.Latte;
         }
+    }
+
+    public void ResetCupToStart()
+    {
+        isLocked = false;
+
+        amountOfCoffee = 0.0f;
+        milkAmount = 0;
+        addons.Clear();
+        currentMachine = null;
+
+        state = CupState.OnTable;
+
+        transform.SetParent(startParent);
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+
+        if (PlayerInventory.Instance.currentCup == this)
+            PlayerInventory.Instance.currentCup = null;
+
+        Debug.Log("Чашка возвращена на место");
     }
 }

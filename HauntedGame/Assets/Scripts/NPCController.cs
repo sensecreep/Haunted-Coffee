@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class NPCController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class NPCController : MonoBehaviour
 
     public Transform startPoint;
     public Transform cafeCounterPoint;
+    public Transform exitPoint;
 
     public float talkDistance = 2f;
     public GameObject talkHint;
@@ -17,6 +19,9 @@ public class NPCController : MonoBehaviour
     private bool reachedCafe = false;
     private bool playerIsNear = false;
     private bool questCompleted = false;
+    private bool isLeaving = false;
+
+    private Action onLeftCafe;
 
     public bool PlayerIsInTalkDistance => playerIsNear;
 
@@ -25,7 +30,7 @@ public class NPCController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        talkHint.SetActive(false);
+        //talkHint.SetActive(false);
 
         GoToCafe();
     }
@@ -45,6 +50,7 @@ public class NPCController : MonoBehaviour
 
     void GoToCafe()
     {
+        agent.isStopped = false;
         agent.SetDestination(cafeCounterPoint.position);
     }
 
@@ -55,7 +61,6 @@ public class NPCController : MonoBehaviour
         {
             reachedCafe = true;
             agent.isStopped = true;
-
         }
     }
 
@@ -63,6 +68,9 @@ public class NPCController : MonoBehaviour
     {
         float distance = Vector3.Distance(player.transform.position, transform.position);
 
+        playerIsNear = distance <= talkDistance;
+
+        /*
         if (distance <= talkDistance)
         {
             if (!playerIsNear)
@@ -79,7 +87,34 @@ public class NPCController : MonoBehaviour
                 talkHint.SetActive(false);
             }
         }
+        */
     }
+    public void LeaveCafe(Action callback)
+    {
+        questCompleted = true;
+        isLeaving = true;
+        playerIsNear = false;
+
+        if (talkHint != null)
+            talkHint.SetActive(false);
+
+        onLeftCafe = callback;
+
+        agent.isStopped = false;
+        agent.SetDestination(exitPoint.position);
+
+        Debug.Log("Клиент уходит");
+    }
+    void CheckArrivalToExit()
+    {
+        if (!agent.pathPending &&
+            agent.remainingDistance <= agent.stoppingDistance + 0.1f)
+        {
+            onLeftCafe?.Invoke();
+            Destroy(gameObject);
+        }
+    }
+
     /*
     void CheckPlayerInteraction()
     {
