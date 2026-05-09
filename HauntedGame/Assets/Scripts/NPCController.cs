@@ -11,7 +11,6 @@ public class NPCController : MonoBehaviour
     public Transform exitPoint;
 
     public float talkDistance = 2f;
-    public GameObject talkHint;
 
     private NavMeshAgent agent;
     private GameObject player;
@@ -30,13 +29,17 @@ public class NPCController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player");
 
-        //talkHint.SetActive(false);
-
         GoToCafe();
     }
 
     private void Update()
     {
+        if (isLeaving)
+        {
+            CheckArrivalToExit();
+            return;
+        }
+
         if (!reachedCafe)
         {
             CheckArrivalToCafe();
@@ -44,12 +47,23 @@ public class NPCController : MonoBehaviour
         else if (!questCompleted)
         {
             CheckPlayerDistance();
-            //CheckPlayerInteraction();
         }
     }
 
     void GoToCafe()
     {
+        if (agent == null)
+        {
+            Debug.LogError("NavMeshAgent не найден");
+            return;
+        }
+
+        if (cafeCounterPoint == null)
+        {
+            Debug.LogError("cafeCounterPoint не назначен");
+            return;
+        }
+
         agent.isStopped = false;
         agent.SetDestination(cafeCounterPoint.position);
     }
@@ -66,75 +80,58 @@ public class NPCController : MonoBehaviour
 
     void CheckPlayerDistance()
     {
+        if (player == null) return;
+
         float distance = Vector3.Distance(player.transform.position, transform.position);
-
         playerIsNear = distance <= talkDistance;
-
-        /*
-        if (distance <= talkDistance)
-        {
-            if (!playerIsNear)
-            {
-                playerIsNear = true;
-                talkHint.SetActive(true);
-            }
-        }
-        else
-        {
-            if (playerIsNear)
-            {
-                playerIsNear = false;
-                talkHint.SetActive(false);
-            }
-        }
-        */
     }
+
     public void LeaveCafe(Action callback)
     {
+        if (isLeaving)
+            return;
+
         questCompleted = true;
         isLeaving = true;
         playerIsNear = false;
-
-        if (talkHint != null)
-            talkHint.SetActive(false);
-
         onLeftCafe = callback;
+
+        if (exitPoint == null)
+        {
+            Debug.LogError("exitPoint не назначен. Удаляю клиента без ухода.");
+            FinishLeaving();
+            return;
+        }
 
         agent.isStopped = false;
         agent.SetDestination(exitPoint.position);
 
-        Debug.Log("Клиент уходит");
+        Debug.Log("Клиент уходит к exitPoint");
     }
+
     void CheckArrivalToExit()
     {
+        if (exitPoint == null)
+        {
+            FinishLeaving();
+            return;
+        }
+
+        float distanceToExit = Vector3.Distance(transform.position, exitPoint.position);
+
         if (!agent.pathPending &&
-            agent.remainingDistance <= agent.stoppingDistance + 0.1f)
+            (agent.remainingDistance <= agent.stoppingDistance + 0.1f || distanceToExit <= 0.5f))
         {
-            onLeftCafe?.Invoke();
-            Destroy(gameObject);
+            FinishLeaving();
         }
     }
 
-    /*
-    void CheckPlayerInteraction()
+    void FinishLeaving()
     {
-        if (playerIsNear && Input.GetKeyDown(KeyCode.E))
-        {
-            StartDialogue();
-        }
+        Debug.Log("Клиент ушёл, удаляем объект");
+
+        onLeftCafe?.Invoke();
+
+        Destroy(gameObject);
     }
-
-    
-    void StartDialogue()
-    {
-        questCompleted = true;
-        talkHint.SetActive(false);
-
-        var dialogBox = FindObjectOfType<DialogeBox>(true);
-        var lines = DialogueManager.Instance.GetDialogue(dialogueId);
-
-        dialogBox.gameObject.SetActive(true);
-        dialogBox.StartDialogue(lines);
-    }
-    */
 }

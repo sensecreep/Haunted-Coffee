@@ -5,20 +5,15 @@ public class CustomerSpawner : MonoBehaviour
 {
     public static CustomerSpawner Instance;
 
-    [Header("Spawn")]
     public GameObject customerPrefab;
+
     public Transform spawnPoint;
     public Transform cafeCounterPoint;
     public Transform exitPoint;
 
-    [Header("UI")]
     public DialogeBox dialogueBox;
     public GameObject pressEUI;
 
-    [Header("Camera")]
-    public Transform npcLookPoint;
-
-    [Header("Settings")]
     public float spawnDelay = 1.5f;
 
     private GameObject currentCustomer;
@@ -53,7 +48,6 @@ public class CustomerSpawner : MonoBehaviour
 
         npcController.cafeCounterPoint = cafeCounterPoint;
         npcController.exitPoint = exitPoint;
-        //npcController.talkHint = pressEUI;
 
         dialogueTrigger.dialogueBox = dialogueBox;
         dialogueTrigger.pressEUI = pressEUI;
@@ -64,8 +58,6 @@ public class CustomerSpawner : MonoBehaviour
             dialogueTrigger.npcLookPoint = lookPoint;
         else
             dialogueTrigger.npcLookPoint = currentCustomer.transform;
-
-        //dialogueTrigger.npcLookPoint = npcLookPoint;
 
         Debug.Log("Новый клиент заспавнен");
     }
