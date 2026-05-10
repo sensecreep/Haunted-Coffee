@@ -5,6 +5,18 @@ using UnityEngine.EventSystems;
 
 public class CoffeeMachineController : MonoBehaviour
 {
+    public Image pourFillImage;
+
+    [Header("Progress Zones")]
+    public RectTransform zonesRoot;
+    public Image underZoneImage;
+    public Image idealZoneImage;
+    public Image overZoneImage;
+
+    public Color underColor = new Color(1f, 0.2f, 0.2f, 0.6f);
+    public Color idealColor = new Color(0.2f, 1f, 0.3f, 0.7f);
+    public Color overColor = new Color(1f, 0.2f, 0.2f, 0.6f);
+
     [Header("Links")]
     public Transform portafilterSlot;
     public PortafilterController portafilter;
@@ -44,9 +56,38 @@ public class CoffeeMachineController : MonoBehaviour
         Finished
     }
 
+    void SetupPourZones()
+    {
+        if (underZoneImage == null || idealZoneImage == null || overZoneImage == null)
+            return;
+
+        underZoneImage.color = underColor;
+        idealZoneImage.color = idealColor;
+        overZoneImage.color = overColor;
+
+        SetZone(underZoneImage.rectTransform, 0f, idealMin);
+        SetZone(idealZoneImage.rectTransform, idealMin, idealMax);
+        SetZone(overZoneImage.rectTransform, idealMax, 1f);
+    }
+
+    void SetZone(RectTransform rect, float min, float max)
+    {
+        rect.anchorMin = new Vector2(min, 0f);
+        rect.anchorMax = new Vector2(max, 1f);
+
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+    }
+
     void Start()
     {
         machineUI.SetActive(false);
+
+        pourSlider.minValue = 0f;
+        pourSlider.maxValue = 1f;
+        pourSlider.value = 0f;
+
+        SetupPourZones();
     }
     public void EnterMachineMode()
     {
@@ -272,6 +313,9 @@ public class CoffeeMachineController : MonoBehaviour
         currentValue = 0f;
         pourSlider.value = 0f;
 
+        if (pourFillImage != null)
+            pourFillImage.color = Color.red;
+
         hasCup = false;
         currentCup = null;
 
@@ -293,7 +337,31 @@ public class CoffeeMachineController : MonoBehaviour
     void ContinuePour()
     {
         currentValue += Time.deltaTime * pourSpeed;
+        currentValue = Mathf.Clamp01(currentValue);
+
         pourSlider.value = currentValue;
+
+        UpdatePourFillColor();
+
+        if (currentValue >= 1f)
+        {
+            StopPour();
+        }
+    }
+
+    void UpdatePourFillColor()
+    {
+        if (pourFillImage == null)
+            return;
+
+        if (currentValue >= idealMin && currentValue <= idealMax)
+        {
+            pourFillImage.color = Color.green;
+        }
+        else
+        {
+            pourFillImage.color = Color.red;
+        }
     }
 
     void StopPour()

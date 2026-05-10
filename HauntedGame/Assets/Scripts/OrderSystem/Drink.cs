@@ -8,6 +8,7 @@ public class Drink
     public int milkAmount;
     public List<AddonType> addons;
     public CoffeeBeans beans;
+    public PourQuality pourQuality;
 }
 
 public enum DrinkType
@@ -16,6 +17,13 @@ public enum DrinkType
     Americano,
     Latte,
     Cappuccino
+}
+
+public enum PourQuality
+{
+    UnderExtracted, // недолив
+    Ideal,
+    OverExtracted  // перелив
 }
 
 public enum AddonType

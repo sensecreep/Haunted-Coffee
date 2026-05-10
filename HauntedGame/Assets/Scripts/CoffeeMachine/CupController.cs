@@ -9,6 +9,8 @@ public class CupController : MonoBehaviour
     public List<AddonType> addons = new List<AddonType>();
 
     public CoffeeMachineController currentMachine;
+    public PourQuality pourQuality = PourQuality.Ideal;
+
     public enum CupState
     {
         OnTable,
@@ -152,6 +154,7 @@ public class CupController : MonoBehaviour
         milkAmount = 0;
         addons.Clear();
         currentMachine = null;
+        pourQuality = PourQuality.Ideal;
 
         state = CupState.OnTable;
 
