@@ -175,7 +175,8 @@ public class DrinkAssemblyController : MonoBehaviour
             beans = PlayerInventory.Instance.selectedBeans,
             milkAmount = currentCup.milkAmount,
             drinkType = currentCup.GetDrinkType(),
-            addons = new List<AddonType>(currentCup.addons)
+            addons = new List<AddonType>(currentCup.addons),
+            pourQuality = currentCup.pourQuality
         };
 
         PlayerInventory.Instance.currentDrink = drink;

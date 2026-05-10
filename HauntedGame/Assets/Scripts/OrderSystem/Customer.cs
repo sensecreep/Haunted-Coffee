@@ -16,6 +16,11 @@ public class Customer : MonoBehaviour
         BuildDialogueLines();
     }
 
+    public OrderEvaluation EvaluateDrink(Drink drink)
+    {
+        return OrderComparer.Evaluate(currentOrder, drink);
+    }
+
     public void Serve()
     {
         State = CustomerState.Served;

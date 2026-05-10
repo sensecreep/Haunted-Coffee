@@ -147,7 +147,13 @@ public class NPCDialogueTrigger : MonoBehaviour
             return;
         }
 
-        bool success = customer.CheckDrink(playerDrink);
+        OrderEvaluation evaluation = customer.EvaluateDrink(playerDrink);
+        //bool success = customer.CheckDrink(playerDrink);
+
+        int earnedMoney = evaluation.finalMoney;
+
+        if (MoneyManager.Instance != null)
+            MoneyManager.Instance.AddMoney(earnedMoney);
 
         ResetPlayerDrinkAndCup();
 
@@ -160,33 +166,36 @@ public class NPCDialogueTrigger : MonoBehaviour
         currentDialogueMode = DialogueMode.ServeReaction;
 
         pressEUI.SetActive(false);
+        dialogueBox.gameObject.SetActive(true);
 
-        if (success)
+        if (evaluation.reactionType == CustomerReactionType.Bad)
         {
-            Debug.Log("Клиент доволен 😊");
-
-            dialogueBox.gameObject.SetActive(true);
             dialogueBox.StartDialogue(new string[]
             {
-            "Спасибо!",
-            "Именно то, что я заказывал."
+            "Это совсем не то, что я заказывал.",
+            "Я не буду за это платить."
             });
         }
-        else
+        else if (evaluation.reactionType == CustomerReactionType.Normal)
         {
-            Debug.Log("Заказ неверный 😡");
-
-            dialogueBox.gameObject.SetActive(true);
             dialogueBox.StartDialogue(new string[]
             {
-            "Это не мой заказ.",
-            "Я просил другой напиток."
+            "Ну... напиток правильный, но есть недочёты.",
+            "Я заплачу " + earnedMoney + " руб."
+            });
+        }
+        else if (evaluation.reactionType == CustomerReactionType.Perfect)
+        {
+            dialogueBox.StartDialogue(new string[]
+            {
+            "Прекрасно!",
+            "Это именно то, что я хотел.",
+            "Держите " + earnedMoney + " руб."
             });
         }
 
-        //customer.Serve();
-
-        //PlayerInventory.Instance.currentDrink = null;
+        Debug.Log("Результат заказа: " + evaluation.reactionType);
+        Debug.Log("Получено: " + earnedMoney);
     }
 
     void ResetPlayerDrinkAndCup()

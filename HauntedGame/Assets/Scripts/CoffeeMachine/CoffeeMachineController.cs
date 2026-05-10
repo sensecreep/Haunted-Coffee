@@ -372,9 +372,10 @@ public class CoffeeMachineController : MonoBehaviour
 
         currentCup.AddCoffee(currentValue);
 
-        Debug.Log("Остановлено: " + currentValue);
+        PourQuality quality = Evaluate();
+        currentCup.pourQuality = quality;
 
-        Evaluate();
+        Debug.Log("Остановлено: " + currentValue + " | Пролив: " + quality);
 
         // 🔥 сброс холдера
         portafilter.ResetToDefault();
@@ -404,13 +405,21 @@ public class CoffeeMachineController : MonoBehaviour
         return hit.transform == buttonRenderer.transform;
     }
 
-    void Evaluate()
+    PourQuality Evaluate()
     {
         if (currentValue < idealMin)
+        {
             Debug.Log("Недолив ❌");
-        else if (currentValue > idealMax)
+            return PourQuality.UnderExtracted;
+        }
+
+        if (currentValue > idealMax)
+        {
             Debug.Log("Перелив ❌");
-        else
-            Debug.Log("Идеально ☕✅");
+            return PourQuality.OverExtracted;
+        }
+
+        Debug.Log("Идеально ☕✅");
+        return PourQuality.Ideal;
     }
 }
