@@ -4,6 +4,9 @@ using static PitcherController;
 
 public class DrinkAssemblyController : MonoBehaviour
 {
+    [Header("Water")]
+    public KettleItem kettle;
+
     [Header("Links")]
     public Transform cupSlot;
     public CupController cup;           // ссылка на единственную кружку
@@ -65,12 +68,54 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
+        KettleItem clickedKettle = hit.transform.GetComponentInParent<KettleItem>();
+        if (clickedKettle != null)
+        {
+            TryAddWater(clickedKettle);
+            return;
+        }
+
         if (hit.transform == currentCup.transform) 
         {
             FinishDrink();
         }
+    }
 
+    void TryAddWater(KettleItem clickedKettle)
+    {
+        if (currentCup == null)
+        {
+            Debug.Log("Нет чашки");
+            return;
+        }
 
+        if (currentCup.amountOfCoffee == 0.0f)
+        {
+            Debug.Log("Сначала нужно добавить кофе");
+            return;
+        }
+
+        if (currentCup.milkAmount > 0)
+        {
+            Debug.Log("Нельзя добавить воду в молочный напиток");
+            return;
+        }
+
+        if (currentCup.hasWater)
+        {
+            Debug.Log("Кипяток уже добавлен");
+            return;
+        }
+
+        if (!clickedKettle.hasHotWater)
+        {
+            Debug.Log("В чайнике нет кипятка");
+            return;
+        }
+
+        currentCup.AddWater();
+
+        Debug.Log("Добавлен кипяток — получится американо");
     }
 
     void TryPlaceCup()
@@ -176,7 +221,8 @@ public class DrinkAssemblyController : MonoBehaviour
             milkAmount = currentCup.milkAmount,
             drinkType = currentCup.GetDrinkType(),
             addons = new List<AddonType>(currentCup.addons),
-            pourQuality = currentCup.pourQuality
+            pourQuality = currentCup.pourQuality,
+            hasWater = currentCup.hasWater
         };
 
         PlayerInventory.Instance.currentDrink = drink;

@@ -9,6 +9,7 @@ public class Drink
     public List<AddonType> addons;
     public CoffeeBeans beans;
     public PourQuality pourQuality;
+    public bool hasWater;
 }
 
 public enum DrinkType

@@ -6,6 +6,7 @@ public class CupController : MonoBehaviour
     [Header("Drink Data")]
     public float amountOfCoffee = 0.0f;
     public int milkAmount = 0; // приходит ИЗ ПИТЧЕРА
+    public bool hasWater = false;
     public List<AddonType> addons = new List<AddonType>();
 
     public CoffeeMachineController currentMachine;
@@ -109,7 +110,11 @@ public class CupController : MonoBehaviour
 
         Debug.Log("Молоко применено из питчера: " + milkAmount);
     }
-
+    public void AddWater()
+    {
+        hasWater = true;
+        Debug.Log("В чашку добавлен кипяток");
+    }
     public void AddCoffee(float amount)
     {
         amountOfCoffee = amount;
@@ -127,23 +132,21 @@ public class CupController : MonoBehaviour
 
     public DrinkType GetDrinkType()
     {
-        if (amountOfCoffee == 0.0f)
-            return DrinkType.Espresso;
-
-        switch (milkAmount)
+        if (milkAmount == 0)
         {
-            case 0:
-                return DrinkType.Espresso;
+            if (hasWater)
+                return DrinkType.Americano;
 
-            case 1:
-                return DrinkType.Cappuccino;
-
-            case 2:
-                return DrinkType.Latte;
-
-            default:
-                return DrinkType.Latte;
+            return DrinkType.Espresso;
         }
+
+        if (milkAmount == 1)
+            return DrinkType.Cappuccino;
+
+        if (milkAmount == 2)
+            return DrinkType.Latte;
+
+        return DrinkType.Latte;
     }
 
     public void ResetCupToStart()
@@ -152,6 +155,7 @@ public class CupController : MonoBehaviour
 
         amountOfCoffee = 0.0f;
         milkAmount = 0;
+        hasWater = false;
         addons.Clear();
         currentMachine = null;
         pourQuality = PourQuality.Ideal;

@@ -245,7 +245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -398.23996, y: -0.00001774054}
+  m_AnchoredPosition: {x: -398.23944, y: -0.00001774054}
   m_SizeDelta: {x: 398, y: 807.45996}
   m_Pivot: {x: 0, y: 1}
 --- !u!225 &40074599
@@ -639,6 +639,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85a5e2eb64d189d45b044d73069682aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DrinkAssemblyController
+  kettle: {fileID: 854354697}
   cupSlot: {fileID: 1445002317}
   cup: {fileID: 257569698}
   pitcher: {fileID: 128449421}
@@ -2716,6 +2717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CupController
   amountOfCoffee: 0
   milkAmount: 0
+  hasWater: 0
   addons: 
   currentMachine: {fileID: 0}
   pourQuality: 1
@@ -3640,6 +3642,81 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1001 &411091992
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 28.318336
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 28.318336
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2.2968745
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.153
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.939
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 23.871
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000057601163
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.000000057601163
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      propertyPath: m_Name
+      value: Retro Kettle
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 854354698}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 854354697}
+  m_SourcePrefab: {fileID: 100100000, guid: 71bebc1426534cf489f70e5900598576, type: 3}
 --- !u!1001 &431441426
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5335,6 +5412,45 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 853705758}
   m_CullTransparentMesh: 1
+--- !u!1 &854354693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 71bebc1426534cf489f70e5900598576, type: 3}
+  m_PrefabInstance: {fileID: 411091992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &854354697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854354693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d1d1d85d926ec44b72bdada28339b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KettleItem
+  hasHotWater: 1
+--- !u!65 &854354698
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854354693}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.027598254, y: 0.021092102, z: 0.4345218}
+  m_Center: {x: 0.0015119992, y: -0.00011865517, z: 0.18353486}
 --- !u!1 &866114806
 GameObject:
   m_ObjectHideFlags: 0
@@ -7305,7 +7421,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1615469908}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99998546
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -14486,3 +14602,4 @@ SceneRoots:
   - {fileID: 58766946}
   - {fileID: 1566032282}
   - {fileID: 1420354269}
+  - {fileID: 411091992}
