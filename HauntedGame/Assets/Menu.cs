@@ -13,9 +13,9 @@ public class Menu : MonoBehaviour
     {
         SceneManager.LoadScene("Settings");
     }
-    public void StartLoading()
+    public void StartGame()
     {
-        SceneManager.LoadScene("Loading");
+        SceneManager.LoadScene("GameScene");
     }
     public void BackToMenu()
     {
@@ -24,10 +24,6 @@ public class Menu : MonoBehaviour
     public void StartSelectSlot()
     {
         SceneManager.LoadScene("SelectSlot");
-    }
-    public void StartGame()
-    {
-        SceneManager.LoadScene("NPCTask");
     }
 
     public void LoadNextDay()

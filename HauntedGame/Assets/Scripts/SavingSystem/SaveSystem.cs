@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine;
 
@@ -22,6 +23,8 @@ public static class SaveSystem
 
     public static void Save(SaveData data, int slot)
     {
+        data.saveDateTime = DateTime.Now.ToString("dd/MM/yy, HH:mm");
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(GetPath(slot), json);
 

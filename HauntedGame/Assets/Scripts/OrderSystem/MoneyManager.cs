@@ -5,27 +5,32 @@ public class MoneyManager : MonoBehaviour
 {
     public static MoneyManager Instance;
 
-    public int money = 0;
+    public int dayMoney = 0;
 
-    public TextMeshProUGUI moneyText;
+    public TextMeshProUGUI dayMoneyText;
 
     private void Awake()
     {
         Instance = this;
+    }
+    private void Start()
+    {
         UpdateUI();
     }
-
     public void AddMoney(int amount)
     {
-        money += amount;
+        dayMoney += amount;
         UpdateUI();
 
-        Debug.Log("Получено денег: " + amount + " | Всего: " + money);
+        Debug.Log("Получено денег: " + amount + " | За день: " + dayMoney);
     }
-
+    public int GetDayMoney()
+    {
+        return dayMoney;
+    }
     void UpdateUI()
     {
-        if (moneyText != null)
-            moneyText.text = money + " руб.";
+        if (dayMoneyText != null)
+            dayMoneyText.text = dayMoney + " руб.";
     }
 }

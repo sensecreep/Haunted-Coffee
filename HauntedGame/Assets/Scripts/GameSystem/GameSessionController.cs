@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.EventSystems;
@@ -7,6 +8,11 @@ using UnityEngine.UI;
 
 public class GameSessionController : MonoBehaviour
 {
+    [Header("End Screen Stats")]
+    public TextMeshProUGUI earnedTodayText;
+    public TextMeshProUGUI totalMoneyText;
+    public TextMeshProUGUI dayText;
+
     [Header("Player")]
     public MonoBehaviour playerController;
     public MonoBehaviour cameraController;
@@ -63,6 +69,21 @@ public class GameSessionController : MonoBehaviour
         isRunning = false;
 
         Debug.Log("Смена окончена");
+
+        int earnedToday = MoneyManager.Instance.GetDayMoney();
+
+        int finishedDay = GameProgressManager.Instance.CurrentDay;
+
+        GameProgressManager.Instance.CompleteDay(earnedToday);
+
+        if (earnedTodayText != null)
+            earnedTodayText.text = "Выручка за сегодня: " + earnedToday + " руб.";
+
+        if (totalMoneyText != null)
+            totalMoneyText.text = "За всё время: " + GameProgressManager.Instance.TotalMoney + " руб.";
+
+        if (dayText != null)
+            dayText.text = "Конец " + finishedDay + " смены";
 
         // Показываем экран конца дня
         if (endScreen != null)

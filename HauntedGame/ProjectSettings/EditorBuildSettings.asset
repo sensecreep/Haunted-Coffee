@@ -6,20 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/NPCTask.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
     path: Assets/Scenes/StartMenu.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Loading.unity
-    guid: dfa1e302c73e03643ac8114b65e29ede
   - enabled: 1
     path: Assets/Scenes/SelectSlot.unity
     guid: 1f73c6d5a9555e144af5669026b8fee6
   - enabled: 1
+    path: Assets/Scenes/GameScene.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
     path: Assets/Scenes/Settings.unity
     guid: 89befc1839e8b2b458199f0d73a62a46
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: dfa1e302c73e03643ac8114b65e29ede
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
