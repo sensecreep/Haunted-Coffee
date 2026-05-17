@@ -42,9 +42,15 @@ public class CoffeeGrinderUI : MonoBehaviour
 
     public void OnBeansSelected(CoffeeBeans beans)
     {
-        PlayerInventory.Instance.SetBeans(beans);
-        gameObject.SetActive(false);
+        if (trigger == null)
+        {
+            Debug.LogError("CoffeeGrinderTrigger не передан в UI");
+            return;
+        }
 
-        //trigger.CloseGrinder();
+        bool wasGround = trigger.TryGrindSelectedBeans(beans);
+
+        if (wasGround)
+            gameObject.SetActive(false);
     }
 }

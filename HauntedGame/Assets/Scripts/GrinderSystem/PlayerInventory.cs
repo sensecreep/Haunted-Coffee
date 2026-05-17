@@ -5,7 +5,6 @@ public class PlayerInventory : MonoBehaviour
     public static PlayerInventory Instance;
 
     public Drink currentDrink;
-    public CoffeeBeans selectedBeans;
     public CupController currentCup;
 
     void Awake()
@@ -14,11 +13,5 @@ public class PlayerInventory : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
-    }
-
-    public void SetBeans(CoffeeBeans beans)
-    {
-        selectedBeans = beans;
-        Debug.Log("☕ Выбраны зерна: " + beans.beanName);
     }
 }

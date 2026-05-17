@@ -8,6 +8,7 @@ public class CupController : MonoBehaviour
     public int milkAmount = 0; // приходит ИЗ ПИТЧЕРА
     public bool hasWater = false;
     public List<AddonType> addons = new List<AddonType>();
+    public CoffeeBeans beans;
 
     public CoffeeMachineController currentMachine;
     public PourQuality pourQuality = PourQuality.Ideal;
@@ -115,11 +116,12 @@ public class CupController : MonoBehaviour
         hasWater = true;
         Debug.Log("В чашку добавлен кипяток");
     }
-    public void AddCoffee(float amount)
+    public void AddCoffee(float amount, CoffeeBeans coffeeBeans)
     {
         amountOfCoffee = amount;
+        beans = coffeeBeans;
 
-        Debug.Log("В чашке есть кофе");
+        Debug.Log("В чашке есть кофе. Зерна: " + beans.beanName);
     }
 
     public void AddAddon(AddonType type)
@@ -156,6 +158,7 @@ public class CupController : MonoBehaviour
         amountOfCoffee = 0.0f;
         milkAmount = 0;
         hasWater = false;
+        beans = null;
         addons.Clear();
         currentMachine = null;
         pourQuality = PourQuality.Ideal;

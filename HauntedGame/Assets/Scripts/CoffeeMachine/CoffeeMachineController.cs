@@ -219,6 +219,12 @@ public class CoffeeMachineController : MonoBehaviour
         if (portafilter.state != PortafilterState.InHand)
             return;
 
+        if (!portafilter.hasCoffee || portafilter.BeansInPortafilter == null)
+        {
+            Debug.Log("В холдере нет молотого кофе");
+            return;
+        }
+
         Camera cam = CameraFocusController.Instance.GetActiveCamera();
 
         Debug.Log(cam.name);
@@ -241,7 +247,7 @@ public class CoffeeMachineController : MonoBehaviour
 
         Debug.Log("Попали в: " + hit.transform.name);
 
-        portafilter.InsertIntoGrinder(portafilterSlot);
+        portafilter.InsertIntoMachine(portafilterSlot);
         portafilter.isLocked = true; // 🔥 блокируем
 
         state = State.HasPortafilter;
@@ -370,7 +376,8 @@ public class CoffeeMachineController : MonoBehaviour
 
         buttonRenderer.material = readyMat;
 
-        currentCup.AddCoffee(currentValue);
+        CoffeeBeans extractedBeans = portafilter.BeansInPortafilter;
+        currentCup.AddCoffee(currentValue, extractedBeans);
 
         PourQuality quality = Evaluate();
         currentCup.pourQuality = quality;

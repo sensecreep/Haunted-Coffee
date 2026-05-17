@@ -15,6 +15,7 @@ public class PortafilterController : MonoBehaviour
     public Transform defaultPoint;  // позиция
 
     public bool hasCoffee = false;
+    public CoffeeBeans BeansInPortafilter { get; private set; }
 
     void Awake()
     {
@@ -25,6 +26,9 @@ public class PortafilterController : MonoBehaviour
         cam = interactionCamera;
         rend = GetComponent<Renderer>();
         outlineObject.SetActive(false);
+
+        if (coffeeVisual != null)
+            coffeeVisual.SetActive(hasCoffee);
     }
 
     void Update()
@@ -38,7 +42,8 @@ public class PortafilterController : MonoBehaviour
     {
         OnTable,
         InHand,
-        InGrinder
+        InGrinder,
+        InMachine
     }
 
     void TryPickUp()
@@ -72,9 +77,38 @@ public class PortafilterController : MonoBehaviour
         transform.localRotation = Quaternion.identity;
 
         // показываем кофе
-        coffeeVisual.SetActive(true);
+        if (coffeeVisual != null)
+            coffeeVisual.SetActive(hasCoffee);
     }
+    public void InsertIntoMachine(Transform slot)
+    {
+        state = PortafilterState.InMachine;
 
+        transform.SetParent(slot);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+
+        if (coffeeVisual != null)
+            coffeeVisual.SetActive(hasCoffee);
+    }
+    public void FillWithGroundCoffee(CoffeeBeans beans)
+    {
+        BeansInPortafilter = beans;
+        hasCoffee = true;
+
+        if (coffeeVisual != null)
+            coffeeVisual.SetActive(true);
+
+        Debug.Log("В холдер засыпаны молотые зерна: " + beans.beanName);
+    }
+    public void ClearCoffee()
+    {
+        BeansInPortafilter = null;
+        hasCoffee = false;
+
+        if (coffeeVisual != null)
+            coffeeVisual.SetActive(false);
+    }
     void OnMouseEnter()
     {
         if (state == PortafilterState.InHand || isLocked) return;
@@ -107,9 +141,8 @@ public class PortafilterController : MonoBehaviour
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
 
-        hasCoffee = false;
+        ClearCoffee();
         isLocked = false;
-        coffeeVisual.SetActive(false);
 
         Debug.Log("Холдер сброшен");
     }

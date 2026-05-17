@@ -4,6 +4,8 @@ using static PitcherController;
 
 public class DrinkAssemblyController : MonoBehaviour
 {
+    [SerializeField] private MilkPourController milkPourController;
+
     [Header("Water")]
     public KettleItem kettle;
 
@@ -75,7 +77,7 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
-        if (hit.transform == currentCup.transform) 
+        if (hit.transform == currentCup.transform)
         {
             FinishDrink();
         }
@@ -112,6 +114,17 @@ public class DrinkAssemblyController : MonoBehaviour
             Debug.Log("В чайнике нет кипятка");
             return;
         }
+
+        if (clickedKettle.IsPouring)
+        {
+            Debug.Log("Вода уже наливается");
+            return;
+        }
+
+        bool animationStarted = clickedKettle.StartPourWater();
+
+        if (!animationStarted)
+            return;
 
         currentCup.AddWater();
 
@@ -177,9 +190,10 @@ public class DrinkAssemblyController : MonoBehaviour
             return;
         }
 
+        milkPourController.StartPourMilk();
         currentCup.ApplyMilkFromPitcher(pitcher.milkLevel);
 
-        pitcher.ResetToDefault();
+        //pitcher.ResetToDefault();
 
         Debug.Log("Молоко перелито в чашку");
     }
@@ -217,7 +231,7 @@ public class DrinkAssemblyController : MonoBehaviour
 
         Drink drink = new Drink
         {
-            beans = PlayerInventory.Instance.selectedBeans,
+            beans = currentCup.beans,
             milkAmount = currentCup.milkAmount,
             drinkType = currentCup.GetDrinkType(),
             addons = new List<AddonType>(currentCup.addons),
@@ -231,10 +245,15 @@ public class DrinkAssemblyController : MonoBehaviour
         currentCup.PickUp();
 
         Debug.Log("Напиток собран: " + drink.drinkType);
+        Debug.Log("Напиток собран: " + drink.beans);
+        Debug.Log("Напиток собран: " + drink.milkAmount);
+        Debug.Log("Напиток собран: " + drink.addons);
+        Debug.Log("Напиток собран: " + drink.pourQuality);
+        Debug.Log("Напиток собран: " + drink.hasWater);
+
+
 
         ResetStation();
-
-        PlayerInventory.Instance.selectedBeans = null;
     }
 
     void ResetStation()

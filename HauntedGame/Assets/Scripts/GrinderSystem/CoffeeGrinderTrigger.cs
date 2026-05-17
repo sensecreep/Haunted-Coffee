@@ -62,7 +62,31 @@ public class CoffeeGrinderTrigger : MonoBehaviour
         player.transform.position = playerSpot.position;
         player.transform.rotation = playerSpot.rotation;
     }
+    public bool TryGrindSelectedBeans(CoffeeBeans beans)
+    {
+        if (beans == null)
+        {
+            Debug.LogWarning("Не выбраны зерна");
+            return false;
+        }
 
+        if (portafilter == null)
+        {
+            Debug.LogError("Холдер не назначен в CoffeeGrinderTrigger");
+            return false;
+        }
+
+        if (portafilter.state != PortafilterController.PortafilterState.InGrinder)
+        {
+            Debug.Log("Сначала вставьте холдер в кофемолку");
+            return false;
+        }
+
+        portafilter.FillWithGroundCoffee(beans);
+
+        Debug.Log("Помол выполнен. Зерна в холдере: " + beans.beanName);
+        return true;
+    }
     public void CloseGrinder()
     {
         isUsing = false;
