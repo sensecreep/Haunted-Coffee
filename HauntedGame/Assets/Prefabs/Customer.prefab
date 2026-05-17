@@ -31,6 +31,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5471711713057099137}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &8336769181664772600
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7310263349045044664}
+  m_Layer: 0
+  m_Name: VisualRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7310263349045044664
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8336769181664772600}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5471711713057099137}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9110889362123883271
 GameObject:
   m_ObjectHideFlags: 0
@@ -49,6 +80,7 @@ GameObject:
   - component: {fileID: 4434338274910290709}
   - component: {fileID: 2472630123736543217}
   - component: {fileID: 5241458943019741130}
+  - component: {fileID: 1370252218991877373}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -70,6 +102,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2733996494862623256}
+  - {fileID: 7310263349045044664}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8583018566051163062
@@ -87,7 +120,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9110889362123883271}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -239,7 +272,6 @@ MonoBehaviour:
   cafeCounterPoint: {fileID: 0}
   exitPoint: {fileID: 0}
   talkDistance: 3
-  talkHint: {fileID: 0}
 --- !u!114 &5241458943019741130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,3 +291,20 @@ MonoBehaviour:
     preferredBitterness: 0
     preferredAcidity: 0
   isCafeCustomer: 1
+--- !u!114 &1370252218991877373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9110889362123883271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6631cae5bba3e947ba110adf55be346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisitorSkinController
+  visualRoot: {fileID: 7310263349045044664}
+  skinPrefabs:
+  - {fileID: 2636444977920382699, guid: de5bc783d75299442850611a2dc7953f, type: 3}
+  - {fileID: 6768565482677708374, guid: 4eb9c30b53a17694b8127070e2f77901, type: 3}
+  randomizeOnStart: 1
