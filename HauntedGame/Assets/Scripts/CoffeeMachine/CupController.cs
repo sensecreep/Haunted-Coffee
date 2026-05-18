@@ -13,6 +13,10 @@ public class CupController : MonoBehaviour
     public CoffeeMachineController currentMachine;
     public PourQuality pourQuality = PourQuality.Ideal;
 
+    [Header("Liquid Visuals")]
+    [SerializeField] private GameObject milkVisual;
+    [SerializeField] private GameObject waterVisual;
+
     public enum CupState
     {
         OnTable,
@@ -162,6 +166,12 @@ public class CupController : MonoBehaviour
         addons.Clear();
         currentMachine = null;
         pourQuality = PourQuality.Ideal;
+
+        if (milkVisual != null)
+            milkVisual.SetActive(false);
+
+        if (waterVisual != null)
+            waterVisual.SetActive(false);
 
         state = CupState.OnTable;
 

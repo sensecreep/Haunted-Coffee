@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: continue
+  m_text: "\u043F\u0440\u043E\u0434\u043E\u043B\u0436\u0438\u0442\u044C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
@@ -612,7 +612,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: new game
+  m_text: "\u043D\u043E\u0432\u0430\u044F \u0438\u0433\u0440\u0430"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
@@ -1260,7 +1260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: exit game
+  m_text: "\u0432\u044B\u0445\u043E\u0434"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
@@ -1396,7 +1396,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: settings
+  m_text: "\u043D\u0430\u0441\u0442\u0440\u043E\u0439\u043A\u0438"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}

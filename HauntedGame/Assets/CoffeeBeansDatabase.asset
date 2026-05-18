@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: CoffeeBeansDatabase
   m_EditorClassIdentifier: Assembly-CSharp::CoffeeBeansData
   beans:
-  - beanName: Arabica
-    bitterness: 2
-    acidity: 4
-  - beanName: Robusta
-    bitterness: 5
-    acidity: 2
-  - beanName: Hz
+  - beanName: "\u041A\u043E\u043B\u0443\u043C\u0431\u0438\u044F"
     bitterness: 3
+    acidity: 4
+  - beanName: "\u042D\u0444\u0438\u043E\u043F\u0438\u044F"
+    bitterness: 4
+    acidity: 4
+  - beanName: "\u0411\u0440\u0430\u0437\u0438\u043B\u0438\u044F"
+    bitterness: 5
     acidity: 3

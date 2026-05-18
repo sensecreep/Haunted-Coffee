@@ -4317,8 +4317,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.0000050826, y: -57}
-  m_SizeDelta: {x: 324.8422, y: 50}
+  m_AnchoredPosition: {x: -0.000015258789, y: -57}
+  m_SizeDelta: {x: 574.4723, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1883976820
 MonoBehaviour:
@@ -4340,7 +4340,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: SELECT SLOT
+  m_text: "\u0412\u042B\u0411\u0420\u0410\u0422\u042C \u0421\u041E\u0425\u0420\u0410\u041D\u0415\u041D\u0418\u0415"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
