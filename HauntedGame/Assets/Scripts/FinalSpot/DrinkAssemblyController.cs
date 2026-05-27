@@ -251,8 +251,6 @@ public class DrinkAssemblyController : MonoBehaviour
         Debug.Log("Напиток собран: " + drink.pourQuality);
         Debug.Log("Напиток собран: " + drink.hasWater);
 
-
-
         ResetStation();
     }
 

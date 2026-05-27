@@ -25,15 +25,13 @@ public class MilkStationTrigger : MonoBehaviour
 
     void Update()
     {
-        if (!playerInRange || isUsing)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isUsing && playerInRange && Input.GetKeyDown(KeyCode.E))
         {
             EnterMilkStation();
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (isUsing && Input.GetKeyDown(KeyCode.Escape))
         {
             ExitMilkStation();
         }
@@ -41,6 +39,9 @@ public class MilkStationTrigger : MonoBehaviour
 
     void EnterMilkStation()
     {
+        if (isUsing)
+            return;
+
         isUsing = true;
 
         if (pressEUI != null)
@@ -49,23 +50,36 @@ public class MilkStationTrigger : MonoBehaviour
         MovePlayerToSpot();
 
         PlayerLock.Instance.Lock();
-
         CameraFocusController.Instance.FocusOn(cameraPoint);
 
-        milkController.EnterMilkMode();
+        if (milkController != null)
+        {
+            if (milkController.pitcher != null)
+                milkController.pitcher.currentStation = this;
+
+            milkController.EnterMilkMode();
+        }
+
+        Debug.Log("Вошли на станцию молока");
     }
 
     public void ExitMilkStation()
     {
+        if (!isUsing)
+            return;
+
         isUsing = false;
 
-        milkController.ExitMilkMode();
+        if (milkController != null)
+            milkController.ExitMilkMode();
 
         CameraFocusController.Instance.Return();
         PlayerLock.Instance.Unlock();
 
-        if (pressEUI != null)
+        if (pressEUI != null && playerInRange)
             pressEUI.SetActive(true);
+
+        Debug.Log("Вышли со станции молока");
     }
 
     void MovePlayerToSpot()
@@ -83,7 +97,7 @@ public class MilkStationTrigger : MonoBehaviour
 
         playerInRange = true;
 
-        if (pressEUI != null)
+        if (pressEUI != null && !isUsing)
             pressEUI.SetActive(true);
     }
 

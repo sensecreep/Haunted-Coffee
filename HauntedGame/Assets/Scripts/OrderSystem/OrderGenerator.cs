@@ -12,7 +12,6 @@ public static class OrderGenerator
         {
             drinkType = randomDrink,
 
-            // 🔥 теперь зависит от напитка
             milkAmount = DrinkUtils.GetMilkAmount(randomDrink),
 
             addons = GetRandomAddons(),

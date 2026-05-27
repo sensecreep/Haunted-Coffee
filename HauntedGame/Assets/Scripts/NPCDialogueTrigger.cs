@@ -178,11 +178,9 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
         else if (evaluation.reactionType == CustomerReactionType.Normal)
         {
-            dialogueBox.StartDialogue(new string[]
-            {
-            "Ну... напиток правильный, но есть недочёты.",
-            "Я заплачу " + earnedMoney + " руб."
-            });
+            dialogueBox.StartDialogue(
+                BuildNormalReactionLines(evaluation, earnedMoney)
+            );
         }
         else if (evaluation.reactionType == CustomerReactionType.Perfect)
         {
@@ -194,8 +192,32 @@ public class NPCDialogueTrigger : MonoBehaviour
             });
         }
 
+        if (OrderUI.Instance != null)
+            OrderUI.Instance.Clear();
+
         Debug.Log("Результат заказа: " + evaluation.reactionType);
         Debug.Log("Получено: " + earnedMoney);
+    }
+
+    string[] BuildNormalReactionLines(OrderEvaluation evaluation, int earnedMoney)
+    {
+        string mistakesText = "";
+
+        if (evaluation.mistakes != null && evaluation.mistakes.Count > 0)
+        {
+            mistakesText = string.Join(", ", evaluation.mistakes);
+        }
+        else
+        {
+            mistakesText = "небольшие недочёты";
+        }
+
+        return new string[]
+        {
+        "Ну... напиток правильный, но есть недочёты.",
+        mistakesText + ".",
+        "Я заплачу " + earnedMoney + " руб."
+        };
     }
 
     void ResetPlayerDrinkAndCup()
