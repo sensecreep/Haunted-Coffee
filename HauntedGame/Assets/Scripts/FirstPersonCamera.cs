@@ -8,7 +8,10 @@ public class FirstPersonCamera : MonoBehaviour
 
     void Start()
     {
+        sensitivity = PlayerPrefs.GetFloat("MouseSensitivity", sensitivity);
+
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Update()

@@ -1286,7 +1286,7 @@ MonoBehaviour:
   titleText: {fileID: 1634311317}
   dateText: {fileID: 1521143442}
   button: {fileID: 393911607}
-  deleteButton: {fileID: 0}
+  deleteButton: {fileID: 262739818}
 --- !u!1 &573306389
 GameObject:
   m_ObjectHideFlags: 0
@@ -1784,7 +1784,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: back
+  m_text: "\u043D\u0430\u0437\u0430\u0434"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
   m_sharedMaterial: {fileID: -3526451096953321095, guid: 58d467bf83cf58843846b0711aaa4282, type: 2}
@@ -2847,6 +2847,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d5c925672115624793730a8478fd596, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  introSceneName: IntroScene
+  selectSlotSceneName: SelectSlot
+  settingsSceneName: Settings
+  mainMenuSceneName: StartMenu
+  maxSaveSlots: 3
+  noFreeSlotsPanel: {fileID: 0}
+  noFreeSlotsText: {fileID: 0}
 --- !u!1 &1118682167
 GameObject:
   m_ObjectHideFlags: 0
@@ -2884,8 +2891,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -113.16815, y: 40}
-  m_SizeDelta: {x: 133.3163, y: 30}
+  m_AnchoredPosition: {x: -138.35468, y: 40}
+  m_SizeDelta: {x: 183.6894, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1118682169
 MonoBehaviour:
@@ -3971,6 +3978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SaveSlotsMenu
   gameSceneName: GameScene
+  introSceneName: IntroScene
   slots:
   - {fileID: 1086680874}
   - {fileID: 1803684377}

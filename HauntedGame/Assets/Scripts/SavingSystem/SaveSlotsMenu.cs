@@ -5,6 +5,7 @@ public class SaveSlotsMenu : MonoBehaviour
 {
     [Header("Scene")]
     public string gameSceneName = "GameScene";
+    public string introSceneName = "IntroScene";
 
     [Header("Slots")]
     public SaveSlotUI[] slots;
@@ -26,20 +27,23 @@ public class SaveSlotsMenu : MonoBehaviour
     {
         SaveSystem.SelectedSlot = slotNumber;
 
-        // Если сохранения нет — создаём новую игру
-        if (!SaveSystem.HasSave(slotNumber))
+        SaveData data = SaveSystem.Load(slotNumber);
+
+        if (data == null)
         {
-            SaveData newSave = new SaveData
+            data = new SaveData
             {
                 currentDay = 1,
-                totalMoney = 0
+                totalMoney = 0,
+                hasSeenIntro = false
             };
 
-            SaveSystem.Save(newSave, slotNumber);
+            SaveSystem.Save(data, slotNumber);
         }
 
-        SceneManager.LoadScene(gameSceneName);
+        SceneManager.LoadScene(data.hasSeenIntro ? gameSceneName : introSceneName);
     }
+
     public void DeleteSlot(int slotNumber)
     {
         SaveSystem.DeleteSave(slotNumber);

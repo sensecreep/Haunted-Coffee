@@ -74,6 +74,7 @@ public class CameraFocusController : MonoBehaviour
 
     public Camera fpsCamera;
     public Camera interactionCamera;
+    public bool IsFocused { get; private set; }
 
     void Awake()
     {
@@ -91,6 +92,7 @@ public class CameraFocusController : MonoBehaviour
 
     public void FocusOn(Transform anchor)
     {
+        IsFocused = true;
         // ВАЖНО: сначала включаем interaction
         interactionCamera.transform.position = anchor.position;
         interactionCamera.transform.rotation = anchor.rotation;
@@ -101,6 +103,7 @@ public class CameraFocusController : MonoBehaviour
 
     public void Return()
     {
+        IsFocused = false;
         // ВАЖНО: сначала включаем fps
         fpsCamera.enabled = true;
         interactionCamera.enabled = false;
