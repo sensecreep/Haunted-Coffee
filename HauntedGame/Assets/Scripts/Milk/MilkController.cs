@@ -24,6 +24,11 @@ public class MilkController : MonoBehaviour
     public Vector3 liftOffset = new Vector3(-0.45f, -0.2f, 0.08f); // вверх + чуть вперёд
     bool isTilting = false;
 
+    [Header("Milk Add Sound")]
+    [SerializeField] private AudioSource milkAddAudioSource;
+    [SerializeField] private AudioClip milkAddSound;
+    [SerializeField, Range(0f, 1f)] private float milkAddVolume = 1f;
+
     private int currentClicks = 0;
     private bool isActive = false;
 
@@ -33,6 +38,18 @@ public class MilkController : MonoBehaviour
         currentClicks = 0;
 
         Debug.Log("Режим молока включен");
+    }
+
+    private void Start()
+    {
+        if (milkAddAudioSource == null)
+            milkAddAudioSource = GetComponent<AudioSource>();
+
+        if (milkAddAudioSource != null)
+        {
+            milkAddAudioSource.playOnAwake = false;
+            milkAddAudioSource.loop = false;
+        }
     }
 
     public void ExitMilkMode()
@@ -130,6 +147,8 @@ public class MilkController : MonoBehaviour
 
         SpawnMilkFX();
 
+        PlayMilkAddSound();
+
         // ждём пока "льётся"
         yield return new WaitForSeconds(pourDuration * 0.8f);
 
@@ -139,6 +158,8 @@ public class MilkController : MonoBehaviour
             Destroy(currentMilkFX);
             currentMilkFX = null;
         }
+
+        StopMilkAddSound();
 
         t = 0f;
 
@@ -158,5 +179,32 @@ public class MilkController : MonoBehaviour
         milkBox.localRotation = startRot;
 
         isTilting = false;
+    }
+
+    private void PlayMilkAddSound()
+    {
+        if (milkAddAudioSource == null || milkAddSound == null)
+            return;
+
+        milkAddAudioSource.Stop();
+
+        milkAddAudioSource.clip = milkAddSound;
+        milkAddAudioSource.volume = milkAddVolume;
+        milkAddAudioSource.loop = true;
+
+        milkAddAudioSource.Play();
+    }
+
+    private void StopMilkAddSound()
+    {
+        if (milkAddAudioSource == null)
+            return;
+
+        milkAddAudioSource.Stop();
+    }
+
+    private void OnDisable()
+    {
+        StopMilkAddSound();
     }
 }

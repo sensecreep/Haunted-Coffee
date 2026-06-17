@@ -19,6 +19,11 @@ public class KettleItem : MonoBehaviour
     [SerializeField] private float returnDuration = 0.5f;
     [SerializeField] private float tiltAngle = 55f;
 
+    [Header("Water Pour Sound")]
+    [SerializeField] private AudioSource waterPourAudioSource;
+    [SerializeField] private AudioClip waterPourSound;
+    [SerializeField, Range(0f, 1f)] private float waterPourVolume = 1f;
+
     private Transform startParent;
     private Vector3 startLocalPosition;
     private Quaternion startLocalRotation;
@@ -43,6 +48,19 @@ public class KettleItem : MonoBehaviour
 
         if (waterVisualInCup != null)
             waterVisualInCup.SetActive(false);
+
+        if (waterPourAudioSource == null)
+            waterPourAudioSource = GetComponent<AudioSource>();
+
+        if (waterPourAudioSource != null)
+        {
+            waterPourAudioSource.playOnAwake = false;
+            waterPourAudioSource.loop = true;
+            waterPourAudioSource.volume = waterPourVolume;
+
+            if (waterPourSound != null)
+                waterPourAudioSource.clip = waterPourSound;
+        }
     }
 
     public bool StartPourWater()
@@ -96,6 +114,7 @@ public class KettleItem : MonoBehaviour
         Quaternion targetRotation = pourStartRotation * Quaternion.Euler(0f, 0f, tiltAngle);
 
         waterStream.gameObject.SetActive(true);
+        PlayWaterPourSound();
 
         float timer = 0f;
 
@@ -128,6 +147,7 @@ public class KettleItem : MonoBehaviour
 
         kettle.localRotation = pourStartRotation;
         waterStream.gameObject.SetActive(false);
+        StopWaterPourSound();
 
         ReturnKettleToStartPoint();
 
@@ -145,6 +165,26 @@ public class KettleItem : MonoBehaviour
         waterStream.SetPosition(1, cupTarget.position);
     }
 
+    private void PlayWaterPourSound()
+    {
+        if (waterPourAudioSource == null || waterPourSound == null)
+            return;
+
+        waterPourAudioSource.Stop();
+
+        waterPourAudioSource.clip = waterPourSound;
+        waterPourAudioSource.volume = waterPourVolume;
+        waterPourAudioSource.loop = true;
+
+        waterPourAudioSource.Play();
+    }
+    private void StopWaterPourSound()
+    {
+        if (waterPourAudioSource == null)
+            return;
+
+        waterPourAudioSource.Stop();
+    }
     private void CacheStartTransform()
     {
         if (kettle == null)
@@ -164,5 +204,14 @@ public class KettleItem : MonoBehaviour
         kettle.SetParent(startParent);
         kettle.localPosition = startLocalPosition;
         kettle.localRotation = startLocalRotation;
+    }
+    private void OnDisable()
+    {
+        StopWaterPourSound();
+
+        if (waterStream != null)
+            waterStream.gameObject.SetActive(false);
+
+        isPouring = false;
     }
 }

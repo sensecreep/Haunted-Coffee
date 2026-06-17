@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using static PortafilterController;
 
 public class CoffeeGrinderTrigger : MonoBehaviour
@@ -11,15 +12,31 @@ public class CoffeeGrinderTrigger : MonoBehaviour
     public PortafilterController portafilter;
     //public Transform grinderClickable; // сама модель кофемолки
 
+    [Header("Grinder Sound")]
+    public AudioSource grinderAudioSource;
+    public AudioClip grindingSound;
+    public float grindingDuration = 2f;
+
     private bool playerInRange;
     private bool isUsing;
+    private bool isGrinding;
 
     void Start()
     {
         if (pressEUI != null)
             pressEUI.SetActive(false);
 
-        grinderUI.gameObject.SetActive(false);
+        if (grinderUI != null)
+            grinderUI.gameObject.SetActive(false);
+
+        if (grinderAudioSource == null)
+            grinderAudioSource = GetComponent<AudioSource>();
+
+        if (grinderAudioSource != null)
+        {
+            grinderAudioSource.playOnAwake = false;
+            grinderAudioSource.loop = false;
+        }
     }
 
     void Update()
@@ -40,6 +57,9 @@ public class CoffeeGrinderTrigger : MonoBehaviour
 
     void OpenGrinder()
     {
+        if (isGrinding)
+            return;
+
         isUsing = true;
 
         if (pressEUI != null)
@@ -51,8 +71,11 @@ public class CoffeeGrinderTrigger : MonoBehaviour
 
         CameraFocusController.Instance.FocusOn(cameraPoint);
 
-        grinderUI.gameObject.SetActive(true);
-        grinderUI.Open(this);
+        if (grinderUI != null)
+        {
+            grinderUI.gameObject.SetActive(true);
+            grinderUI.Open(this);
+        }
     }
 
     void MovePlayerToSpot()
@@ -64,6 +87,12 @@ public class CoffeeGrinderTrigger : MonoBehaviour
     }
     public bool TryGrindSelectedBeans(CoffeeBeans beans)
     {
+        if (isGrinding)
+        {
+            Debug.Log("Кофемолка уже работает");
+            return false;
+        }
+
         if (beans == null)
         {
             Debug.LogWarning("Не выбраны зерна");
@@ -82,13 +111,59 @@ public class CoffeeGrinderTrigger : MonoBehaviour
             return false;
         }
 
-        portafilter.FillWithGroundCoffee(beans);
+        StartCoroutine(GrindingRoutine(beans));
+        //portafilter.FillWithGroundCoffee(beans);
 
         Debug.Log("Помол выполнен. Зерна в холдере: " + beans.beanName);
         return true;
     }
+
+    private IEnumerator GrindingRoutine(CoffeeBeans beans)
+    {
+        isGrinding = true;
+
+        if (portafilter != null)
+            portafilter.isLocked = true;
+
+        if (grinderUI != null)
+            grinderUI.gameObject.SetActive(false);
+
+        PlayGrindingSound();
+
+        yield return new WaitForSeconds(grindingDuration);
+
+        if (portafilter != null)
+        {
+            portafilter.FillWithGroundCoffee(beans);
+            portafilter.isLocked = false;
+        }
+
+        isGrinding = false;
+
+        Debug.Log("Помол выполнен. Зерна в холдере: " + beans.beanName);
+    }
+
+    private void PlayGrindingSound()
+    {
+        if (grinderAudioSource == null)
+            return;
+
+        grinderAudioSource.Stop();
+
+        if (grindingSound != null)
+            grinderAudioSource.clip = grindingSound;
+
+        grinderAudioSource.Play();
+    }
+
     public void CloseGrinder()
     {
+        if (isGrinding)
+        {
+            Debug.Log("Нельзя закрыть кофемолку во время помола");
+            return;
+        }
+
         isUsing = false;
 
         grinderUI.gameObject.SetActive(false);
@@ -123,5 +198,9 @@ public class CoffeeGrinderTrigger : MonoBehaviour
     public bool IsUsing()
     {
         return isUsing;
+    }
+    public bool IsGrinding()
+    {
+        return isGrinding;
     }
 }

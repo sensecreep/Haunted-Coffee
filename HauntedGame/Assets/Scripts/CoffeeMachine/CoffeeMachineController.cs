@@ -7,6 +7,11 @@ public class CoffeeMachineController : MonoBehaviour
 {
     public Image pourFillImage;
 
+    [Header("Coffee Machine Sound")]
+    public AudioSource pourAudioSource;
+    public AudioClip pourSound;
+    [Range(0f, 1f)] public float pourSoundVolume = 1f;
+
     [Header("Progress Zones")]
     public RectTransform zonesRoot;
     public Image underZoneImage;
@@ -88,6 +93,19 @@ public class CoffeeMachineController : MonoBehaviour
         pourSlider.value = 0f;
 
         SetupPourZones();
+
+        if (pourAudioSource == null)
+            pourAudioSource = GetComponent<AudioSource>();
+
+        if (pourAudioSource != null)
+        {
+            pourAudioSource.playOnAwake = false;
+            pourAudioSource.loop = true;
+            pourAudioSource.volume = pourSoundVolume;
+
+            if (pourSound != null)
+                pourAudioSource.clip = pourSound;
+        }
     }
     public void EnterMachineMode()
     {
@@ -99,6 +117,10 @@ public class CoffeeMachineController : MonoBehaviour
     public void ExitMachineMode()
     {
         isActive = false;
+        isHoldingButton = false;
+
+        StopPourSound();
+
         machineUI.SetActive(false);
 
         CameraFocusController.Instance.Return();
@@ -337,6 +359,8 @@ public class CoffeeMachineController : MonoBehaviour
         portafilter.isLocked = true; // на всякий
         buttonRenderer.material = pressedMat; // 🔥 тёмно-зелёный
 
+        PlayPourSound();
+
         Debug.Log("Начался пролив");
     }
 
@@ -372,6 +396,8 @@ public class CoffeeMachineController : MonoBehaviour
 
     void StopPour()
     {
+        StopPourSound();
+
         isHoldingButton = false;
 
         buttonRenderer.material = readyMat;
@@ -428,5 +454,33 @@ public class CoffeeMachineController : MonoBehaviour
 
         Debug.Log("Идеально ☕✅");
         return PourQuality.Ideal;
+    }
+
+    private void PlayPourSound()
+    {
+        if (pourAudioSource == null)
+            return;
+
+        if (pourSound != null)
+            pourAudioSource.clip = pourSound;
+
+        pourAudioSource.volume = pourSoundVolume;
+        pourAudioSource.loop = true;
+
+        if (!pourAudioSource.isPlaying)
+            pourAudioSource.Play();
+    }
+
+    private void StopPourSound()
+    {
+        if (pourAudioSource == null)
+            return;
+
+        pourAudioSource.Stop();
+    }
+
+    private void OnDisable()
+    {
+        StopPourSound();
     }
 }

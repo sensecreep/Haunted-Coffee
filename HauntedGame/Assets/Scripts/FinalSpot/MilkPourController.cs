@@ -15,6 +15,11 @@ public class MilkPourController : MonoBehaviour
     [SerializeField] private float pourDuration = 1.5f;
     [SerializeField] private float tiltAngle = 55f;
 
+    [Header("Milk Pour Sound")]
+    [SerializeField] private AudioSource milkPourAudioSource;
+    [SerializeField] private AudioClip milkPourSound;
+    [SerializeField, Range(0f, 1f)] private float milkPourVolume = 1f;
+
     [Header("Cup Data")]
     [SerializeField] private CupController cup;
 
@@ -28,6 +33,19 @@ public class MilkPourController : MonoBehaviour
 
         if (milkVisualInCup != null)
             milkVisualInCup.SetActive(false);
+
+        if (milkPourAudioSource == null)
+            milkPourAudioSource = GetComponent<AudioSource>();
+
+        if (milkPourAudioSource != null)
+        {
+            milkPourAudioSource.playOnAwake = false;
+            milkPourAudioSource.loop = true;
+            milkPourAudioSource.volume = milkPourVolume;
+
+            if (milkPourSound != null)
+                milkPourAudioSource.clip = milkPourSound;
+        }
     }
 
     public void StartPourMilk()
@@ -68,6 +86,8 @@ public class MilkPourController : MonoBehaviour
 
         if (milkStream != null)
             milkStream.gameObject.SetActive(true);
+
+        PlayMilkPourSound();
 
         float timer = 0f;
 
@@ -110,6 +130,8 @@ public class MilkPourController : MonoBehaviour
         if (milkStream != null)
             milkStream.gameObject.SetActive(false);
 
+        StopMilkPourSound();
+
         PitcherController pitcherController = pitcher.GetComponent<PitcherController>();
 
         if (pitcherController != null)
@@ -127,5 +149,32 @@ public class MilkPourController : MonoBehaviour
 
         milkStream.SetPosition(0, pourPoint.position);
         milkStream.SetPosition(1, cupTarget.position);
+    }
+
+    private void PlayMilkPourSound()
+    {
+        if (milkPourAudioSource == null)
+            return;
+
+        milkPourAudioSource.Stop();
+        milkPourAudioSource.loop = true;
+        milkPourAudioSource.volume = milkPourVolume;
+
+        if (milkPourSound != null)
+            milkPourAudioSource.clip = milkPourSound;
+
+        milkPourAudioSource.Play();
+    }
+
+    private void StopMilkPourSound()
+    {
+        if (milkPourAudioSource == null)
+            return;
+
+        milkPourAudioSource.Stop();
+    }
+    private void OnDisable()
+    {
+        StopMilkPourSound();
     }
 }

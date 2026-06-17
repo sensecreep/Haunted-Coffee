@@ -14,14 +14,39 @@ public class SteamWandController : MonoBehaviour
     [Header("FX")]
     public GameObject steamFX;
 
+    [Header("Sound")]
+    public AudioSource steamAudioSource;
+    public AudioClip steamSound;
+    [Range(0f, 1f)] public float steamSoundVolume = 1f;
+
+    [Header("UI To Hide While Steaming")]
+    public GameObject coffeeMachinePressEUI;
+
     [Header("Settings")]
     public float steamTime = 2f;
 
     private bool isBusy = false;
+    private bool coffeeMachineEWasActive = false;
 
     private void Start()
     {
         outlineObject.SetActive(false);
+
+        if (steamFX != null)
+            steamFX.SetActive(false);
+
+        if (steamAudioSource == null)
+            steamAudioSource = GetComponent<AudioSource>();
+
+        if (steamAudioSource != null)
+        {
+            steamAudioSource.playOnAwake = false;
+            steamAudioSource.loop = true;
+            steamAudioSource.volume = steamSoundVolume;
+
+            if (steamSound != null)
+                steamAudioSource.clip = steamSound;
+        }
     }
 
     void Update()
@@ -37,14 +62,12 @@ public class SteamWandController : MonoBehaviour
 
     void TryStartSteaming()
     {
-        // ❌ нет молока
         if (pitcher.milkLevel == 0)
         {
             Debug.Log("Нет молока");
             return;
         }
 
-        // 🎯 проверка клика по steam wand
         Camera cam = CameraFocusController.Instance.GetActiveCamera();
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -63,28 +86,68 @@ public class SteamWandController : MonoBehaviour
 
         Debug.Log("Начали взбивание");
 
-        // 👉 вставляем питчер
+        HideCoffeeMachinePressEUI();
+
         pitcher.InsertToSteamWand(pitcherSlot);
 
-        // 👉 включаем пар
         if (steamFX != null)
             steamFX.SetActive(true);
 
+        PlaySteamSound();
+
         yield return new WaitForSeconds(steamTime);
 
-        // 👉 выключаем пар
         if (steamFX != null)
             steamFX.SetActive(false);
 
-        // 👉 помечаем как взбитый
+        StopSteamSound();
+
         pitcher.SetSteamed(true);
 
-        // 👉 возвращаем в руки
         pitcher.ReturnToHand();
 
         Debug.Log("Молоко готово");
 
         isBusy = false;
+    }
+
+    private void PlaySteamSound()
+    {
+        if (steamAudioSource == null || steamSound == null)
+            return;
+
+        steamAudioSource.Stop();
+
+        steamAudioSource.clip = steamSound;
+        steamAudioSource.volume = steamSoundVolume;
+        steamAudioSource.loop = true;
+
+        steamAudioSource.Play();
+    }
+
+    private void StopSteamSound()
+    {
+        if (steamAudioSource == null)
+            return;
+
+        steamAudioSource.Stop();
+    }
+
+    private void HideCoffeeMachinePressEUI()
+    {
+        if (coffeeMachinePressEUI == null)
+            return;
+
+        coffeeMachineEWasActive = coffeeMachinePressEUI.activeSelf;
+        coffeeMachinePressEUI.SetActive(false);
+    }
+
+    private void RestoreCoffeeMachinePressEUI()
+    {
+        if (coffeeMachinePressEUI == null)
+            return;
+
+        coffeeMachinePressEUI.SetActive(coffeeMachineEWasActive);
     }
 
     void OnMouseEnter()
@@ -97,5 +160,17 @@ public class SteamWandController : MonoBehaviour
     {
         if (isBusy) return;
         outlineObject.SetActive(false);
+    }
+
+    private void OnDisable()
+    {
+        StopSteamSound();
+
+        if (steamFX != null)
+            steamFX.SetActive(false);
+
+        RestoreCoffeeMachinePressEUI();
+
+        isBusy = false;
     }
 }
