@@ -109,14 +109,27 @@ public class GameSessionController : MonoBehaviour
             animator.speed = 0f;
         }
 
-        // Выключаем все игровые MonoBehaviour, кроме UI и этого скрипта
-        foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>())
+        // Отключаем все Canvas, кроме CanvasEndScreen
+        foreach (Canvas canvas in FindObjectsOfType<Canvas>(true))
         {
-            if (script == this)
+            bool isEndScreenCanvas = endScreen != null &&
+                                     (canvas.gameObject == endScreen ||
+                                      canvas.transform.IsChildOf(endScreen.transform));
+
+            if (isEndScreenCanvas)
                 continue;
 
-            // не трогаем UI
-            if (script.GetComponentInParent<Canvas>() != null)
+            canvas.enabled = false;
+
+            GraphicRaycaster raycaster = canvas.GetComponent<GraphicRaycaster>();
+            if (raycaster != null)
+                raycaster.enabled = false;
+        }
+
+        // Выключаем все игровые MonoBehaviour, кроме EndScreen, EventSystem и этого скрипта
+        foreach (MonoBehaviour script in FindObjectsOfType<MonoBehaviour>(true))
+        {
+            if (script == this)
                 continue;
 
             // не трогаем EventSystem, чтобы кнопки EndScreen работали
@@ -124,6 +137,13 @@ public class GameSessionController : MonoBehaviour
                 continue;
 
             if (script is BaseInputModule)
+                continue;
+
+            // не трогаем только скрипты, которые находятся внутри EndScreen
+            bool isEndScreenScript = endScreen != null &&
+                                     script.transform.IsChildOf(endScreen.transform);
+
+            if (isEndScreenScript)
                 continue;
 
             script.enabled = false;

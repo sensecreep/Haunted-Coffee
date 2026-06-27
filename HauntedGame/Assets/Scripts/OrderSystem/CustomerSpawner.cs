@@ -30,7 +30,8 @@ public class CustomerSpawner : MonoBehaviour
 
     public void SpawnNextCustomer()
     {
-        StartCoroutine(SpawnNextRoutine());
+        //StartCoroutine(SpawnNextRoutine());
+        SpawnCustomer();
     }
 
     IEnumerator SpawnNextRoutine()

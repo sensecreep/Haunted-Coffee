@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static PitcherController;
+using System.Collections;
 
 public class DrinkAssemblyController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class DrinkAssemblyController : MonoBehaviour
     private CupController currentCup;
 
     private bool isActive = false;
+    private bool isSpiceAnimating = false;
 
     private List<AddonType> addedSpices = new List<AddonType>();
 
@@ -45,6 +47,9 @@ public class DrinkAssemblyController : MonoBehaviour
 
     void HandleClick()
     {
+        if (isSpiceAnimating)
+            return;
+
         Camera cam = CameraFocusController.Instance.GetActiveCamera();
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -60,7 +65,8 @@ public class DrinkAssemblyController : MonoBehaviour
         SpiceItem spice = hit.transform.GetComponentInParent<SpiceItem>();
         if (spice != null)
         {
-            AddSpice(spice.type);
+            TryAddSpiceWithAnimation(spice);
+            //AddSpice(spice.type);
             return;
         }
 
@@ -214,7 +220,40 @@ public class DrinkAssemblyController : MonoBehaviour
             Debug.Log("Добавлена специя: " + type);
         }
     }
+    void TryAddSpiceWithAnimation(SpiceItem spice)
+    {
+        if (spice == null)
+            return;
 
+        if (currentCup == null)
+        {
+            Debug.Log("Нет чашки");
+            return;
+        }
+
+        if (addedSpices.Contains(spice.type))
+        {
+            Debug.Log("Эта специя уже добавлена: " + spice.type);
+            return;
+        }
+
+        if (spice.IsAnimating)
+            return;
+
+        StartCoroutine(AddSpiceWithAnimationRoutine(spice));
+    }
+
+    IEnumerator AddSpiceWithAnimationRoutine(SpiceItem spice)
+    {
+        isSpiceAnimating = true;
+
+        yield return spice.PlayPourAnimation(() =>
+        {
+            AddSpice(spice.type);
+        });
+
+        isSpiceAnimating = false;
+    }
     void FinishDrink()
     {
         if (currentCup == null)

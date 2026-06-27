@@ -12,6 +12,11 @@ public class NPCController : MonoBehaviour
 
     public float talkDistance = 2f;
 
+    [Header("Movement")]
+    public float moveSpeed = 4.5f;
+    public float acceleration = 16f;
+    public float angularSpeed = 240f;
+
     private NavMeshAgent agent;
     private GameObject player;
 
@@ -27,6 +32,14 @@ public class NPCController : MonoBehaviour
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+
+        if (agent != null)
+        {
+            agent.speed = moveSpeed;
+            agent.acceleration = acceleration;
+            agent.angularSpeed = angularSpeed;
+        }
+
         player = GameObject.FindGameObjectWithTag("Player");
 
         GoToCafe();

@@ -10,6 +10,7 @@ public class Menu : MonoBehaviour
     [SerializeField] private string selectSlotSceneName = "SelectSlot";
     [SerializeField] private string settingsSceneName = "Settings";
     [SerializeField] private string mainMenuSceneName = "StartMenu";
+    [SerializeField] private string gameSceneName = "GameScene";
 
     [Header("Save Slots")]
     [SerializeField] private int maxSaveSlots = 3;
@@ -114,5 +115,25 @@ public class Menu : MonoBehaviour
             noFreeSlotsPanel.SetActive(true);
         else
             Debug.LogWarning("Нет свободных слотов сохранения.");
+    }
+
+    public void LoadNextDay()
+    {
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadScene(gameSceneName);
+    }
+
+    public void StartMainMenu()
+    {
+        Time.timeScale = 1f;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }

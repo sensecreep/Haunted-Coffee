@@ -128,10 +128,10 @@ public class NPCDialogueTrigger : MonoBehaviour
         }
         else if (currentDialogueMode == DialogueMode.ServeReaction)
         {
-            npcController.LeaveCafe(() =>
-            {
+            npcController.LeaveCafe(null);
+
+            if (CustomerSpawner.Instance != null)
                 CustomerSpawner.Instance.SpawnNextCustomer();
-            });
         }
 
         currentDialogueMode = DialogueMode.None;
