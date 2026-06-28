@@ -291,6 +291,13 @@ public class DrinkAssemblyController : MonoBehaviour
         Debug.Log("Напиток собран: " + drink.hasWater);
 
         ResetStation();
+
+        DrinkAssemblyTrigger trigger = FindFirstObjectByType<DrinkAssemblyTrigger>();
+
+        if (trigger != null)
+        {
+            trigger.CloseAssembly();
+        }
     }
 
     void ResetStation()

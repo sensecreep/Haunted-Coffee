@@ -8,6 +8,9 @@ public class SpiceHoverUI : MonoBehaviour
 
     public float distance = 6f;
 
+    [Header("Assembly Station")]
+    [SerializeField] private DrinkAssemblyTrigger assemblyTrigger;
+
     void Start()
     {
         panel.SetActive(false);

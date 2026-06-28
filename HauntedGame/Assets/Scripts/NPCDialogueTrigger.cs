@@ -143,6 +143,11 @@ public class NPCDialogueTrigger : MonoBehaviour
 
         if (playerDrink == null)
         {
+            playerDrink = TryCreateDirectEspressoFromCup();
+        }
+
+        if (playerDrink == null)
+        {
             Debug.Log("У игрока нет напитка");
             return;
         }
@@ -218,6 +223,48 @@ public class NPCDialogueTrigger : MonoBehaviour
         mistakesText + ".",
         "Я заплачу " + earnedMoney + " руб."
         };
+    }
+
+    Drink TryCreateDirectEspressoFromCup()
+    {
+        CupController cup = PlayerInventory.Instance.currentCup;
+
+        if (cup == null)
+            return null;
+
+        if (cup.state != CupController.CupState.InHand)
+            return null;
+
+        if (cup.amountOfCoffee <= 0.0f)
+            return null;
+
+        if (cup.beans == null)
+            return null;
+
+        if (cup.milkAmount != 0)
+            return null;
+
+        if (cup.hasWater)
+            return null;
+
+        if (cup.addons != null && cup.addons.Count > 0)
+            return null;
+
+        Drink espresso = new Drink
+        {
+            drinkType = DrinkType.Espresso,
+            milkAmount = 0,
+            addons = new System.Collections.Generic.List<AddonType>(),
+            beans = cup.beans,
+            pourQuality = cup.pourQuality,
+            hasWater = false
+        };
+
+        PlayerInventory.Instance.currentDrink = espresso;
+
+        Debug.Log("Эспрессо создано напрямую из чашки после пролива");
+
+        return espresso;
     }
 
     void ResetPlayerDrinkAndCup()
