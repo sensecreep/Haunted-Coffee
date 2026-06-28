@@ -13,12 +13,27 @@ public class SpiceHoverUI : MonoBehaviour
 
     void Start()
     {
-        panel.SetActive(false);
+        if (assemblyTrigger == null)
+            assemblyTrigger = FindObjectOfType<DrinkAssemblyTrigger>();
+
+        Hide();
     }
 
     void Update()
     {
+        if (assemblyTrigger == null || !assemblyTrigger.IsUsing)
+        {
+            Hide();
+            return;
+        }
+
         Camera cam = CameraFocusController.Instance.GetActiveCamera();
+
+        if (cam == null)
+        {
+            Hide();
+            return;
+        }
 
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -38,12 +53,16 @@ public class SpiceHoverUI : MonoBehaviour
 
     void Show(string name)
     {
-        panel.SetActive(true);
-        text.text = name;
+        if (panel != null)
+            panel.SetActive(true);
+
+        if (text != null)
+            text.text = name;
     }
 
     void Hide()
     {
-        panel.SetActive(false);
+        if (panel != null)
+            panel.SetActive(false);
     }
 }

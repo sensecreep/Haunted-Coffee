@@ -13,6 +13,7 @@ public class DrinkAssemblyTrigger : MonoBehaviour
 
     private bool playerInRange;
     private bool isUsing;
+    public bool IsUsing => isUsing;
 
     void Start()
     {

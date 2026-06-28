@@ -245,7 +245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -398.233, y: -0.00001774054}
+  m_AnchoredPosition: {x: -398.22266, y: -0.00001774054}
   m_SizeDelta: {x: 398, y: 807.45996}
   m_Pivot: {x: 0, y: 1}
 --- !u!225 &40074599
@@ -5133,6 +5133,7 @@ MonoBehaviour:
   text: {fileID: 771306287}
   panel: {fileID: 726458125}
   distance: 5
+  assemblyTrigger: {fileID: 1952481924}
 --- !u!65 &393988450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9684,6 +9685,7 @@ MonoBehaviour:
   text: {fileID: 771306287}
   panel: {fileID: 726458125}
   distance: 5
+  assemblyTrigger: {fileID: 1952481924}
 --- !u!82 &938277951
 AudioSource:
   m_ObjectHideFlags: 0
@@ -16328,7 +16330,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1615469908}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9995783
+  m_Size: 0.9999539
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16849,6 +16851,7 @@ MonoBehaviour:
   text: {fileID: 771306287}
   panel: {fileID: 726458125}
   distance: 5
+  assemblyTrigger: {fileID: 1952481924}
 --- !u!82 &1183683448
 AudioSource:
   m_ObjectHideFlags: 0
@@ -27653,6 +27656,7 @@ MonoBehaviour:
   text: {fileID: 771306287}
   panel: {fileID: 726458125}
   distance: 6
+  assemblyTrigger: {fileID: 1952481924}
 --- !u!82 &2047999290
 AudioSource:
   m_ObjectHideFlags: 0
