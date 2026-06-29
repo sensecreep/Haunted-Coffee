@@ -810,8 +810,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introSceneName: IntroScene
   selectSlotSceneName: SelectSlot
-  settingsSceneName: Settings
+  settingsSceneName: Settings 1
   mainMenuSceneName: StartMenu
+  gameSceneName: GameScene
   maxSaveSlots: 3
   noFreeSlotsPanel: {fileID: 431983154}
   noFreeSlotsText: {fileID: 376118534}

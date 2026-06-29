@@ -29,6 +29,10 @@ public class GameSessionController : MonoBehaviour
     [Header("End Screen")]
     public GameObject endScreen;
 
+    [Header("Ending")]
+    [SerializeField] private int endingMoneyGoal = 50000;
+    [SerializeField] private string endingSceneName = "EndingScene";
+
     void Start()
     {
         timer = sessionDuration;
@@ -75,6 +79,17 @@ public class GameSessionController : MonoBehaviour
         int finishedDay = GameProgressManager.Instance.CurrentDay;
 
         GameProgressManager.Instance.CompleteDay(earnedToday);
+
+        if (GameProgressManager.Instance.TotalMoney >= endingMoneyGoal)
+        {
+            Time.timeScale = 1f;
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            SceneManager.LoadScene(endingSceneName);
+            return;
+        }
 
         if (earnedTodayText != null)
             earnedTodayText.text = "Выручка за сегодня: " + earnedToday + " руб.";

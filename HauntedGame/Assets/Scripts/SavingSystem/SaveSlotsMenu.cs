@@ -41,6 +41,9 @@ public class SaveSlotsMenu : MonoBehaviour
             SaveSystem.Save(data, slotNumber);
         }
 
+        //data.totalMoney += 50000;
+        //SaveSystem.Save(data, slotNumber);
+
         SceneManager.LoadScene(data.hasSeenIntro ? gameSceneName : introSceneName);
     }
 

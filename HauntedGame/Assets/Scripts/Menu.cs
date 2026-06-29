@@ -8,7 +8,7 @@ public class Menu : MonoBehaviour
     [Header("Scenes")]
     [SerializeField] private string introSceneName = "IntroScene";
     [SerializeField] private string selectSlotSceneName = "SelectSlot";
-    [SerializeField] private string settingsSceneName = "Settings";
+    [SerializeField] private string settingsSceneName = "Settings 1";
     [SerializeField] private string mainMenuSceneName = "StartMenu";
     [SerializeField] private string gameSceneName = "GameScene";
 
