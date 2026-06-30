@@ -272,6 +272,9 @@ MonoBehaviour:
   cafeCounterPoint: {fileID: 0}
   exitPoint: {fileID: 0}
   talkDistance: 3
+  moveSpeed: 4.5
+  acceleration: 16
+  angularSpeed: 240
 --- !u!114 &5241458943019741130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -306,5 +309,8 @@ MonoBehaviour:
   visualRoot: {fileID: 7310263349045044664}
   skinPrefabs:
   - {fileID: 2636444977920382699, guid: de5bc783d75299442850611a2dc7953f, type: 3}
+  - {fileID: 3360739054549576915, guid: f39ed8f4ca291064696a99ea8f559136, type: 3}
   - {fileID: 6768565482677708374, guid: 4eb9c30b53a17694b8127070e2f77901, type: 3}
+  - {fileID: 1540028421000963656, guid: d998576da1cbf974f919f8ab837a531d, type: 3}
+  - {fileID: 1510127684516758815, guid: f9e17d8e83efacc4b8fd75c8b754e4f0, type: 3}
   randomizeOnStart: 1
